@@ -544,6 +544,7 @@ stuffbox:AddToggle('nolaser', {
 							for _,v in ipairs(shit) do
 								v:Disconnect()
 							end
+                            task.cancel(thread)
 							print('nolaser cancel')
 						end
                     end)
