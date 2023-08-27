@@ -475,7 +475,7 @@ stuffbox:AddToggle('autopickup', {
         end
     end
 })
-stuffbox:AddLabel('not recommended due to annoying and uselessness')
+stuffbox:AddLabel('not recommended\ndue to annoying and uselessness')
 stuffbox:AddToggle('autoopen', {
     Text = 'auto open door',
     Default = false, -- Default value (true / false)
