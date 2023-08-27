@@ -431,7 +431,7 @@ stuffbox:AddToggle('autopickup', {
                     local thread = task.spawn(function()
                         for _,v in ipairs(storages:GetChildren()) do
                             local connection = v.DescendantAdded:Connect(function(part)
-                                if (part.Parent.Name == 'Loot') or (part.Parent.Name == 'Items') then
+                                if (part.Parent.Name == 'Loot') or (part.Parent.Name == 'Items') or (part.Name == "Golden Skull") then
                                     table.insert(cum, part)
                                 end
                             end)
@@ -450,7 +450,7 @@ stuffbox:AddToggle('autopickup', {
 								if (root.Position - v:GetPivot().Position).Magnitude > 50 then
                                     continue
                                 end
-                                local prompt = v:FindFirstChild('ProximityPrompt', true)
+                                local prompt = v:FindFirstChild('ProximityPrompt', true) or v:FindFirstChild('Prompt', true)
                                 if prompt then
                                     fireproximityprompt(prompt)
                                 end
