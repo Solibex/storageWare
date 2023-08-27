@@ -2,6 +2,9 @@ local repo = 'https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main
 local promptservice = game:GetService('ProximityPromptService')
 shared.callbacks = {}
 shared.resetfix = {}
+shared.hooked = {
+    noslidecd = false
+}
 local players = game:GetService('Players')
 local storages = workspace:WaitForChild('Storages')
 local mobs = workspace.Mobs
@@ -143,14 +146,17 @@ stuffbox:AddToggle('noslidecd', {
                 do
                     local thread = task.spawn(function()
                         shared.mathshit = time()
-                        local Old Old = hookfunction(time, function(...)
-                            if Toggles.noslidecd.Value and not checkcaller() then
-                                shared.mathshit += 1.76
-                                return shared.mathshit
-                            else
-                                return Old(...)
-                            end
-                        end)
+                        shared.hooked.noslidecd = true
+                        if shared.hooked.noslidecd == false then
+                            local Old Old = hookfunction(time, function(...)
+                                if Toggles.noslidecd.Value and not checkcaller() then
+                                    shared.mathshit += 1.76
+                                    return shared.mathshit
+                                else
+                                    return Old(...)
+                                end
+                            end)
+                        end
                         print('noslidecd start')
                         shared.callbacks['noslidecd'] = function() if shared.mathshit - time() > 0 then Library:Notify(('wait %.2fs until you could slide normally again'):format(mathshit - time())) end print('noslidecd cancel') end
                     end)
