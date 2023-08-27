@@ -392,20 +392,22 @@ espbox:AddToggle('third_person', {
                 do
                     local thread = task.spawn(function()
                         local shit = {}
-                        for i=1, 2 do
-							print(i)
-							local loop =task.spawn(function()
-								while task.wait() and getgenv().thirdperson do
+                        -- for some reason it needs to be run twice 🤷🏻‍♀️
+                        for _=1, 2 do
+							local loop = task.spawn(function()
+								while task.wait() do
 									players.LocalPlayer.CameraMode = Enum.CameraMode.Classic
 									players.LocalPlayer.CameraMinZoomDistance = 20
 									players.LocalPlayer.CameraMaxZoomDistance = 20
 								end
 							end)
-							table.insert(shit, connection)
+							table.insert(shit, loop)
 						end
                         print('third_person start')
                         shared.callbacks['third_person'] = function()
-                            connection:Disconnect()
+                            for _,v in ipairs(shit) do
+                                task.cancel(v)
+                            end
                             print('third_person cancel')
                         end
                     end)
@@ -473,6 +475,7 @@ stuffbox:AddToggle('autopickup', {
         end
     end
 })
+stuffbox:AddLabel('not recommended due to annoying and uselessness')
 stuffbox:AddToggle('autoopen', {
     Text = 'auto open door',
     Default = false, -- Default value (true / false)
@@ -532,7 +535,6 @@ stuffbox:AddToggle('nolaser', {
                             local connection = v.DescendantAdded:Connect(function(part)
                                 if (part.Parent.Name == 'Kill') then
                                     part.Parent:Destroy()
-									print('destroyed laser')
                                 end
                             end)
                             table.insert(shit, connection)
@@ -568,7 +570,6 @@ stuffbox:AddToggle('nodart', {
                             local connection = v.DescendantAdded:Connect(function(part)
                                 if (part.Parent.Name == 'Wire') then
                                     part.Parent:Destroy()
-									print('destroyed wire')
                                 end
                             end)
                             table.insert(shit, connection)
