@@ -64,12 +64,13 @@ if not fireproximityprompt or identifyexecutor() == "Electron" then
 else
 	newprint('fireproximityprompt good')
 end
-function esp(part, color)
+function esp(part, color, distance)
 	if part:FindFirstChild('pluh') then return end
     local a = Instance.new("BillboardGui",part)
     a.Name = "pluh"
     a.Size = UDim2.new(1,0, 1,0)
     a.AlwaysOnTop = true
+    a.MaxDistance = distance
     local b = Instance.new("Frame",a)
     b.Size = UDim2.new(1,0, 1,0)
     b.BackgroundTransparency = 0.80
@@ -208,24 +209,12 @@ espbox:AddToggle('mob_esp', {
                         local shit = {}
                         for _,v in ipairs(storages:GetChildren()) do
                             local connection = v.DescendantAdded:Connect(function(part)
-								if part:FindFirstChild('pluh') then return end
                                 if (part.Parent.Name == 'Mobs') then
-                                    if (root.Position - part:GetPivot().Position).Magnitude > Options.mobesp_distance.Value then
-                                        if Options.mobesp_distance.Value ~= 0 then
-                                            return
-                                        end
-                                    end
-                                    esp(part, Color3.new(255, 0, 0))
+                                    esp(part, Color3.new(255, 0, 0), Options.mobesp_distance.Value)
                                 end
                             end)
 							local connection2 = mobs.ChildAdded:Connect(function(part)
-									if part:FindFirstChild('pluh') then return end
-                                	if (root.Position - part:GetPivot().Position).Magnitude > Options.mobesp_distance.Value then
-                                        if Options.mobesp_distance.Value ~= 0 then
-                                            return
-                                        end
-                                    end
-                                    esp(part, Color3.new(255, 0, 0))
+                                esp(part, Color3.new(255, 0, 0), Options.mobesp_distance.Value)
                             end)
                             table.insert(shit, connection)
 							table.insert(shit, connection2)
@@ -267,12 +256,7 @@ espbox:AddToggle('npc_esp', {
                         local shit = {}
                         local connection = workspace.DescendantAdded:Connect(function(part)
                             if part.Parent.Name ~= 'NPC' then return end
-                            if (root.Position - part:GetPivot().Position).Magnitude > Options.npcesp_distance.Value then
-                                if Options.npcesp_distance.Value ~= 0 then
-                                    return
-                                end
-                            end
-                            esp(part,Color3.new(0,0,255))
+                            esp(part,Color3.new(0,0,255), Options.npcesp_distance.Value)
                         end)
                         newprint('npc_esp start')
                         shared.callbacks['npc_esp'] = function()
@@ -307,16 +291,16 @@ espbox:AddToggle('third_person', {
                 do
                     local thread = task.spawn(function()
                         local shit = {}
-                        local connection = players.LocalPlayer:GetPropertyChangedSignal('CameraMinZoomDistance'):Connect(function()
-                            players.LocalPlayer.CameraMinZoomDistance = 20
-                        end)
-                        local connection2 = players.LocalPlayer:GetPropertyChangedSignal('CameraMaxZoomDistance'):Connect(function()
-                            players.LocalPlayer.CameraMaxZoomDistance = 20
-                        end)
-                        players.LocalPlayer.CameraMinZoomDistance = 20
-                        players.LocalPlayer.CameraMaxZoomDistance = 20
-                        table.insert(shit, connection)
-                        table.insert(shit, connection2)
+                        for _=1, 2 do
+							local loop = task.spawn(function()
+								while task.wait() do
+									players.LocalPlayer.CameraMode = Enum.CameraMode.Classic
+									players.LocalPlayer.CameraMinZoomDistance = 20
+									players.LocalPlayer.CameraMaxZoomDistance = 20
+								end
+							end)
+							table.insert(shit, loop)
+						end
                         newprint('third_person start')
                         shared.callbacks['third_person'] = function()
                             for _,v in ipairs(shit) do
