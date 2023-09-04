@@ -238,7 +238,6 @@ espbox:AddToggle('mob_esp', {
                             for _,v in ipairs(shit) do
                                 v:Disconnect()
                             end
-                            task.cancel(thread)
                             print('mob_esp cancel')
                         end
                     end)
@@ -318,6 +317,8 @@ espbox:AddToggle('third_person', {
                         local connection2 = players.LocalPlayer:GetPropertyChangedSignal('CameraMaxZoomDistance'):Connect(function()
                             players.LocalPlayer.CameraMaxZoomDistance = 20
                         end)
+                        players.LocalPlayer.CameraMinZoomDistance = 20
+                        players.LocalPlayer.CameraMaxZoomDistance = 20
                         table.insert(shit, connection)
                         table.insert(shit, connection2)
                         print('third_person start')
