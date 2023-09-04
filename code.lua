@@ -3,6 +3,7 @@ local players = game:GetService('Players')
 
 if getgenv().debug then
     rconsolename('debug menu')
+    rconsoleprint('We are running on build ALPHA')
 end
 
 shared.callbacks = {}
