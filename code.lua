@@ -369,7 +369,7 @@ stuffbox:AddToggle('autopickup', {
                                     continue
                                 end
                                 rconsoleprint(
-									'Attempting to pick up '..v.Name..' at '..(root.Position - v:GetPivot().Position).Magnitude)
+									'Attempting to pick up '..v.Name..' at '..(root.Position - v:GetPivot().Position).Magnitude
 								)
                                 local prompt = v:FindFirstChild('ProximityPrompt', true) or v:FindFirstChild('Prompt', true)
                                 if prompt then
