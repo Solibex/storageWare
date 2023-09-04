@@ -8,6 +8,7 @@ shared.hooked = {
 
 local storages = workspace:WaitForChild('Storages')
 local mobs = workspace:WaitForChild('Mobs')
+local npcs = workspace:WaitForChild('NPC')
 
 local char = players.LocalPlayer.Character
 local root = char:WaitForChild('HumanoidRootPart')
@@ -256,16 +257,14 @@ espbox:AddToggle('npc_esp', {
                 do
                     local thread = task.spawn(function()
                         local shit = {}
-                        local connection = workspace.DescendantAdded:Connect(function(part)
-                                if (part.Parent.Name == 'NPC') then
-                                    if (root.Position - part:GetPivot().Position).Magnitude > Options.npcesp_distance.Value then
-                                        if Options.npcesp_distance.Value ~= 0 then
-                                            return
-                                        end
-                                    end
-                                    esp(part,Color3.new(0,0,255))
+                        local connection = npcs.ChildAdded:Connect(function(part)
+                            if (root.Position - part:GetPivot().Position).Magnitude > Options.npcesp_distance.Value then
+                                if Options.npcesp_distance.Value ~= 0 then
+                                    return
                                 end
-                            end)
+                            end
+                            esp(part,Color3.new(0,0,255))
+                        end)
                         print('npc_esp start')
                         shared.callbacks['npc_esp'] = function()
                             connection:Disconnect()
