@@ -69,7 +69,7 @@ local Tab2 = TabBox:AddTab('Tab 2')
 -- Groupbox:AddToggle
 -- Arguments: Index, Options
 -- credit to sowd, modified
-if not fireproximityprompt then
+if not fireproximityprompt or identifyexecutor() == "Electron" then
 	getgenv().fireproximityprompt = function(Obj)
 		if Obj.ClassName == "ProximityPrompt" then 
 			Obj:InputHoldBegin()
@@ -78,7 +78,7 @@ if not fireproximityprompt then
 			error("userdata<ProximityPrompt> expected")
 		end
 	end
-	Library:Notify("exploit isn't supported, you need to look at the prompt")
+	Library:Notify("fireproximityprompt bad, prompt required to be looked")
 else
 	print('fireproximityprompt good')
 end
