@@ -14,7 +14,6 @@ shared.hooked = {
 
 local storages = workspace:WaitForChild('Storages')
 local mobs = workspace:WaitForChild('Mobs')
-local npcs = workspace:WaitForChild('NPC')
 
 local char = players.LocalPlayer.Character
 local root = char:WaitForChild('HumanoidRootPart')
@@ -263,7 +262,8 @@ espbox:AddToggle('npc_esp', {
                 do
                     local thread = task.spawn(function()
                         local shit = {}
-                        local connection = npcs.ChildAdded:Connect(function(part)
+                        local connection = workspace.DescendantAdded:Connect(function(part)
+                            if part.Parent.Name ~= 'NPC' then return end
                             if (root.Position - part:GetPivot().Position).Magnitude > Options.npcesp_distance.Value then
                                 if Options.npcesp_distance.Value ~= 0 then
                                     return
