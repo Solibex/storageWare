@@ -363,7 +363,7 @@ stuffbox:AddToggle('autopickup', {
                         end
                         while task.wait() do
                             for _,v in ipairs(cum) do
-								if (root.Position - v:GetPivot().Position).Magnitude > 100 then
+								if (root.Position - v:GetPivot().Position).Magnitude >= 20 then
                                     continue
                                 end
                                 newprint(
