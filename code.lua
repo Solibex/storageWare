@@ -366,9 +366,6 @@ stuffbox:AddToggle('autopickup', {
 								if (root.Position - v:GetPivot().Position).Magnitude >= 20 then
                                     continue
                                 end
-                                newprint(
-									'Attempting to pick up '..v.Name..' at '..(root.Position - v:GetPivot().Position).Magnitude
-								)
                                 local prompt = v:FindFirstChild('ProximityPrompt', true) or v:FindFirstChild('Prompt', true)
                                 if prompt then
                                     fireproximityprompt(prompt)
