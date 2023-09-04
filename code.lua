@@ -587,6 +587,7 @@ Library:OnUnload(function()
         shared.callbacks[i]()
         shared.callbacks[i] = nil
     end
+    rconsoleclose()
     rconsoleprint('Unloaded!')
     Library.Unloaded = true
 end)
