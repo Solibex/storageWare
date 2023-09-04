@@ -312,21 +312,18 @@ espbox:AddToggle('third_person', {
                 do
                     local thread = task.spawn(function()
                         local shit = {}
-                        
-                        for _=1, 2 do
-							local loop = task.spawn(function()
-								while task.wait() do
-									players.LocalPlayer.CameraMode = Enum.CameraMode.Classic
-									players.LocalPlayer.CameraMinZoomDistance = 20
-									players.LocalPlayer.CameraMaxZoomDistance = 20
-								end
-							end)
-							table.insert(shit, loop)
-						end
+                        local connection = players.LocalPlayer:GetPropertyChangedSignal('CameraMinZoomDistance'):Connect(function()
+                            players.LocalPlayer.CameraMinZoomDistance = 20
+                        end)
+                        local connection2 = players.LocalPlayer:GetPropertyChangedSignal('CameraMaxZoomDistance'):Connect(function()
+                            players.LocalPlayer.CameraMaxZoomDistance = 20
+                        end)
+                        table.insert(shit, connection)
+                        table.insert(shit, connection2)
                         print('third_person start')
                         shared.callbacks['third_person'] = function()
                             for _,v in ipairs(shit) do
-                                task.cancel(v)
+                                v:Disconnect()
                             end
                             print('third_person cancel')
                         end
