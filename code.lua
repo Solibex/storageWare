@@ -57,11 +57,6 @@ else
 end
 function esp(part, color)
 	if part:FindFirstChild('pluh') then return end
-    if (root.Position - part:GetPivot().Position).Magnitude > Options.itemesp_distance.Value then
-       if Options.itemesp_distance.Value ~= 0 then
-            return
-        end
-    end
     local a = Instance.new("BillboardGui",part)
     a.Name = "pluh"
     a.Size = UDim2.new(1,0, 1,0)
