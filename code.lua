@@ -388,6 +388,7 @@ stuffbox:AddToggle('nolaser', {
                         for _,v in ipairs(storages:GetChildren()) do
                             local connection = v.DescendantAdded:Connect(function(part)
                                 if (part.Parent.Name == 'Kill') then
+                                    part.Parent:Clone()
                                     part.Parent:Destroy()
                                 end
                             end)
