@@ -42,7 +42,6 @@ local Tabs = {
 local stuffbox = Tabs.Main:AddLeftGroupbox('stuff')
 local espbox = Tabs.Main:AddRightGroupbox('esp')
 
-
 if not fireproximityprompt or identifyexecutor() == "Electron" then
 	getgenv().fireproximityprompt = function(Obj)
 		if Obj.ClassName == "ProximityPrompt" then 
