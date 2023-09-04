@@ -1,6 +1,11 @@
+getgenv().debug = true
 local promptservice = game:GetService('ProximityPromptService')
 local players = game:GetService('Players')
-getgenv().debug = true
+
+if not getgenv().rconsoleprint then
+    getgenv().rconsoleprint = function(...) rconsoleprint(.....'\n')
+end
+
 if getgenv().debug then
     rconsolename('debug menu')
     rconsoleprint('We are running on build ALPHA')
