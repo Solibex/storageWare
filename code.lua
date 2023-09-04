@@ -1,6 +1,6 @@
 local promptservice = game:GetService('ProximityPromptService')
 local players = game:GetService('Players')
-
+getgenv().debug = true
 if getgenv().debug then
     rconsolename('debug menu')
     rconsoleprint('We are running on build ALPHA')
@@ -363,7 +363,9 @@ stuffbox:AddToggle('autopickup', {
 								if (root.Position - v:GetPivot().Position).Magnitude > 100 then
                                     continue
                                 end
-                                rconsoleprint('Attempting to pick up '..v.Name..' at '..(root.Position - v:GetPivot().Position).Magnitude))
+                                rconsoleprint(
+									'Attempting to pick up '..v.Name..' at '..(root.Position - v:GetPivot().Position).Magnitude)
+								)
                                 local prompt = v:FindFirstChild('ProximityPrompt', true) or v:FindFirstChild('Prompt', true)
                                 if prompt then
                                     fireproximityprompt(prompt)
