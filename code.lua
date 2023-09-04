@@ -1,15 +1,17 @@
-local repo = 'https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/'
 local promptservice = game:GetService('ProximityPromptService')
+local players = game:GetService('Players')
 shared.callbacks = {}
 shared.resetfix = {}
 shared.hooked = {
     noslidecd = false
 }
-local players = game:GetService('Players')
+
 local storages = workspace:WaitForChild('Storages')
-local mobs = workspace.Mobs
+local mobs = workspace:WaitForChild('Mobs')
+
 local char = players.LocalPlayer.Character
 local root = char:WaitForChild('HumanoidRootPart')
+
 players.LocalPlayer.CharacterAdded:Connect(function(character)
 	char = character
 	root = character:WaitForChild('HumanoidRootPart')
@@ -18,15 +20,17 @@ players.LocalPlayer.CharacterAdded:Connect(function(character)
 		shared.resetfix[i]()
 	end
 end)
+
+local repo = 'https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/'
 local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
 local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
 local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
 
 local Window = Library:CreateWindow({
-    -- Set Center to true if you want the menu to appear in the center
-    -- Set AutoShow to true if you want the menu to appear when it is created
-    -- Position and Size are also valid options here
-    -- but you do not need to define them unless you are changing them :)
+    
+    
+    
+    
 
     Title = 'storageware',
     Center = true,
@@ -35,40 +39,24 @@ local Window = Library:CreateWindow({
     MenuFadeTime = 0.2
 })
 
--- CALLBACK NOTE:
--- Passing in callback functions via the initial element parameters (i.e. Callback = function(Value)...) works
--- HOWEVER, using Toggles/Options.INDEX:OnChanged(function(Value) ... ) is the RECOMMENDED way to do this.
--- I strongly recommend decoupling UI code from logic code. i.e. Create your UI elements FIRST, and THEN setup :OnChanged functions later.
 
--- You do not have to set your tabs & groups up this way, just a prefrence.
+
+
+
+
+
 local Tabs = {
-    -- Creates a new tab titled Main
+    
     Main = Window:AddTab('Main'),
     ['UI Settings'] = Window:AddTab('UI Settings'),
 }
 
--- Groupbox and Tabbox inherit the same functions
--- except Tabboxes you have to call the functions on a tab (Tabbox:AddTab(name))
+
+
 local stuffbox = Tabs.Main:AddLeftGroupbox('stuff')
 local espbox = Tabs.Main:AddRightGroupbox('esp')
 
--- We can also get our Main tab via the following code:
--- local LeftGroupBox = Window.Tabs.Main:AddLeftGroupbox('Groupbox')
 
--- Tabboxes are a tiny bit different, but here's a basic example:
---[[
-
-local TabBox = Tabs.Main:AddLeftTabbox() -- Add Tabbox on left side
-
-local Tab1 = TabBox:AddTab('Tab 1')
-local Tab2 = TabBox:AddTab('Tab 2')
-
--- You can now call AddToggle, etc on the tabs you added to the Tabbox
-]]
-
--- Groupbox:AddToggle
--- Arguments: Index, Options
--- credit to sowd, modified
 if not fireproximityprompt or identifyexecutor() == "Electron" then
 	getgenv().fireproximityprompt = function(Obj)
 		if Obj.ClassName == "ProximityPrompt" then 
@@ -90,7 +78,7 @@ function esp(part, color)
         end
     end
     if part:FindFirstChild('pluh') then return end
-    local a = Instance.new("BillboardGui",part) -- pretty much explains everything
+    local a = Instance.new("BillboardGui",part)
     a.Name = "pluh"
     a.Size = UDim2.new(1,0, 1,0)
     a.AlwaysOnTop = true
@@ -113,8 +101,8 @@ function esp(part, color)
 end
 stuffbox:AddToggle('instant_prompt', {
     Text = 'instant prompt',
-    Default = false, -- Default value (true / false)
-    Tooltip = 'instantly pick up items, etc..', -- Information shown when you hover over the toggle
+    Default = false, 
+    Tooltip = 'instantly pick up items, etc..', 
 
     Callback = function(Value)
         if Value == true then
@@ -137,8 +125,8 @@ stuffbox:AddToggle('instant_prompt', {
 })
 stuffbox:AddToggle('noslidecd', {
     Text = 'no slide cooldown',
-    Default = false, -- Default value (true / false)
-    Tooltip = 'remove slide cooldown', -- Information shown when you hover over the toggle
+    Default = false, 
+    Tooltip = 'remove slide cooldown', 
 
     Callback = function(Value)
         if Value == true then
@@ -170,8 +158,8 @@ stuffbox:AddToggle('noslidecd', {
 })
 espbox:AddToggle('item_esp', {
     Text = 'item esp',
-    Default = false, -- Default value (true / false)
-    Tooltip = 'esp for item', -- Information shown when you hover over the toggle
+    Default = false, 
+    Tooltip = 'esp for item', 
 
     Callback = function(Value)
         if Value == true then
@@ -181,7 +169,7 @@ espbox:AddToggle('item_esp', {
                         local shit = {}
                         for _,v in ipairs(storages:GetChildren()) do
                             local connection = v.DescendantAdded:Connect(function(part)
-								-- issues with or condition 
+								
                                 if (part.Parent.Name == 'Loot') then
                                     esp(part)
                                 end
@@ -189,7 +177,7 @@ espbox:AddToggle('item_esp', {
                                     esp(part)
                                 end
 								if (part.Name == 'Golden Skull') then
-									esp(part) -- added for golden skull
+									esp(part) 
 								end
                             end)
                             table.insert(shit, connection)
@@ -221,8 +209,8 @@ espbox:AddSlider('itemesp_distance', {
 })
 espbox:AddToggle('mob_esp', {
     Text = 'mob esp',
-    Default = false, -- Default value (true / false)
-    Tooltip = 'esp for mobs', -- Information shown when you hover over the toggle
+    Default = false, 
+    Tooltip = 'esp for mobs', 
 
     Callback = function(Value)
         if Value == true then
@@ -240,7 +228,7 @@ espbox:AddToggle('mob_esp', {
                                         end
                                     end
                                     if part:FindFirstChild('pluh') then return end
-                                    local a = Instance.new("BillboardGui",part) -- pretty much explains everything
+                                    local a = Instance.new("BillboardGui",part) 
                                     a.Name = "pluh"
                                     a.Size = UDim2.new(1,0, 1,0)
                                     a.AlwaysOnTop = true
@@ -270,7 +258,7 @@ espbox:AddToggle('mob_esp', {
                                         end
                                     end
                                     if part:FindFirstChild('pluh') then return end
-                                    local a = Instance.new("BillboardGui",part) -- pretty much explains everything
+                                    local a = Instance.new("BillboardGui",part) 
                                     a.Name = "pluh"
                                     a.Size = UDim2.new(1,0, 1,0)
                                     a.AlwaysOnTop = true
@@ -320,8 +308,8 @@ espbox:AddSlider('mobesp_distance', {
 })
 espbox:AddToggle('npc_esp', {
     Text = 'npc esp',
-    Default = false, -- Default value (true / false)
-    Tooltip = 'esp for npc', -- Information shown when you hover over the toggle
+    Default = false, 
+    Tooltip = 'esp for npc', 
 
     Callback = function(Value)
         if Value == true then
@@ -337,7 +325,7 @@ espbox:AddToggle('npc_esp', {
                                         end
                                     end
                                     if part:FindFirstChild('pluh') then return end
-                                    local a = Instance.new("BillboardGui",part) -- pretty much explains everything
+                                    local a = Instance.new("BillboardGui",part) 
                                     a.Name = "pluh"
                                     a.Size = UDim2.new(1,0, 1,0)
                                     a.AlwaysOnTop = true
@@ -383,8 +371,8 @@ espbox:AddSlider('npcesp_distance', {
 })
 espbox:AddToggle('third_person', {
     Text = 'third person',
-    Default = false, -- Default value (true / false)
-    Tooltip = 'disclaimer: might be laggy.', -- Information shown when you hover over the toggle
+    Default = false, 
+    Tooltip = 'disclaimer: might be laggy.', 
 
     Callback = function(Value)
         if Value == true then
@@ -392,7 +380,7 @@ espbox:AddToggle('third_person', {
                 do
                     local thread = task.spawn(function()
                         local shit = {}
-                        -- for some reason it needs to be run twice 🤷🏻‍♀️
+                        
                         for _=1, 2 do
 							local loop = task.spawn(function()
 								while task.wait() do
@@ -421,8 +409,8 @@ espbox:AddToggle('third_person', {
 })
 stuffbox:AddToggle('autopickup', {
     Text = 'auto pick up',
-    Default = false, -- Default value (true / false)
-    Tooltip = 'pick up item nearby (recommended to do it manually)', -- Information shown when you hover over the toggle
+    Default = false, 
+    Tooltip = 'pick up item nearby (recommended to do it manually)', 
 
     Callback = function(Value)
         if Value == true then
@@ -478,8 +466,8 @@ stuffbox:AddToggle('autopickup', {
 stuffbox:AddLabel('not recommended\ndue to annoying and uselessness')
 stuffbox:AddToggle('autoopen', {
     Text = 'auto open door',
-    Default = false, -- Default value (true / false)
-    Tooltip = 'open door nearby (instantly)', -- Information shown when you hover over the toggle
+    Default = false, 
+    Tooltip = 'open door nearby (instantly)', 
 
     Callback = function(Value)
         if Value == true then
@@ -522,8 +510,8 @@ stuffbox:AddToggle('autoopen', {
 
 stuffbox:AddToggle('nolaser', {
     Text = 'no laser',
-    Default = false, -- Default value (true / false)
-    Tooltip = 'removes laser hitbox', -- Information shown when you hover over the toggle
+    Default = false, 
+    Tooltip = 'removes laser hitbox', 
 
     Callback = function(Value)
         if Value == true then
@@ -558,8 +546,8 @@ stuffbox:AddToggle('nolaser', {
 })
 stuffbox:AddToggle('nodart', {
     Text = 'no dart trap',
-    Default = false, -- Default value (true / false)
-    Tooltip = 'removes dart trap (the string trap) hitbox', -- Information shown when you hover over the toggle
+    Default = false, 
+    Tooltip = 'removes dart trap (the string trap) hitbox', 
 
     Callback = function(Value)
         if Value == true then
@@ -592,50 +580,50 @@ stuffbox:AddToggle('nodart', {
     end
 })
 stuffbox:AddLabel('Open safe'):AddKeyPicker('opensafe', {
-    -- SyncToggleState only works with toggles.
-    -- It allows you to make a keybind which has its state synced with its parent toggle
+    
+    
 
-    -- Example: Keybind which you use to toggle flyhack, etc.
-    -- Changing the toggle disables the keybind state and toggling the keybind switches the toggle state
+    
+    
 
-    Default = 'Delete', -- String as the name of the keybind (MB1, MB2 for mouse buttons)
+    Default = 'Delete', 
     SyncToggleState = false,
 
 
-    -- You can define custom Modes but I have never had a use for it.
-    Mode = 'Toggle', -- Modes: Always, Toggle, Hold
+    
+    Mode = 'Toggle', 
 
-    Text = 'Open safe', -- Text to display in the keybind menu
-    NoUI = false, -- Set to true if you want to hide from the Keybind menu,
+    Text = 'Open safe', 
+    NoUI = false, 
 
-    -- Occurs when the keybind is clicked, Value is `true`/`false`
+    
     Callback = function(Value)
         players.LocalPlayer.PlayerGui.HUD.Bank.Visible = Value
     end,
 
-    -- Occurs when the keybind itself is changed, `New` is a KeyCode Enum OR a UserInputType Enum
+    
     ChangedCallback = function(New)
         print('[cb] Keybind changed!', New)
     end
 })
 stuffbox:AddLabel('teleport to base'):AddKeyPicker('teleportbase', {
-    -- SyncToggleState only works with toggles.
-    -- It allows you to make a keybind which has its state synced with its parent toggle
+    
+    
 
-    -- Example: Keybind which you use to toggle flyhack, etc.
-    -- Changing the toggle disables the keybind state and toggling the keybind switches the toggle state
+    
+    
 
-    Default = 'Home', -- String as the name of the keybind (MB1, MB2 for mouse buttons)
+    Default = 'Home', 
     SyncToggleState = false,
 
 
-    -- You can define custom Modes but I have never had a use for it.
-    Mode = 'Toggle', -- Modes: Always, Toggle, Hold
+    
+    Mode = 'Toggle', 
 
-    Text = 'Teleport to base', -- Text to display in the keybind menu
-    NoUI = true, -- Set to true if you want to hide from the Keybind menu,
+    Text = 'Teleport to base', 
+    NoUI = true, 
 
-    -- Occurs when the keybind is clicked, Value is `true`/`false`
+    
     Callback = function(Value)
 		local founded = false
         for _,v in ipairs(storages:GetChildren()) do
@@ -648,16 +636,16 @@ stuffbox:AddLabel('teleport to base'):AddKeyPicker('teleportbase', {
 		if founded == false then Library:Notify('no base detected') end
     end,
 
-    -- Occurs when the keybind itself is changed, `New` is a KeyCode Enum OR a UserInputType Enum
+    
     ChangedCallback = function(New)
         print('[cb] Keybind changed!', New)
     end
 })
--- Library functions
--- Sets the watermark visibility
+
+
 Library:SetWatermarkVisibility(true)
 
--- Example of dynamically-updating watermark with common traits (fps and ping)
+
 local FrameTimer = tick()
 local FrameCounter = 0;
 local FPS = 60;
@@ -678,7 +666,7 @@ local WatermarkConnection = game:GetService('RunService').RenderStepped:Connect(
     ));
 end);
 
-Library.KeybindFrame.Visible = true; -- todo: add a function for this
+Library.KeybindFrame.Visible = true; 
 
 Library:OnUnload(function()
     WatermarkConnection:Disconnect()
@@ -690,44 +678,44 @@ Library:OnUnload(function()
     Library.Unloaded = true
 end)
 
--- UI Settings
+
 local MenuGroup = Tabs['UI Settings']:AddLeftGroupbox('Menu')
 
--- I set NoUI so it does not show up in the keybinds menu
+
 MenuGroup:AddButton('Unload', function() Library:Unload() end)
 MenuGroup:AddLabel('Menu bind'):AddKeyPicker('MenuKeybind', { Default = 'End', NoUI = true, Text = 'Menu keybind' })
 
-Library.ToggleKeybind = Options.MenuKeybind -- Allows you to have a custom keybind for the menu
+Library.ToggleKeybind = Options.MenuKeybind 
 
--- Addons:
--- SaveManager (Allows you to have a configuration system)
--- ThemeManager (Allows you to have a menu theme system)
 
--- Hand the library over to our managers
+
+
+
+
 ThemeManager:SetLibrary(Library)
 SaveManager:SetLibrary(Library)
 
--- Ignore keys that are used by ThemeManager.
--- (we dont want configs to save themes, do we?)
+
+
 SaveManager:IgnoreThemeSettings()
 
--- Adds our MenuKeybind to the ignore list
--- (do you want each config to have a different menu key? probably not.)
+
+
 SaveManager:SetIgnoreIndexes({ 'MenuKeybind' })
 
--- use case for doing it this way:
--- a script hub could have themes in a global folder
--- and game configs in a separate folder per game
+
+
+
 ThemeManager:SetFolder('storageware')
 SaveManager:SetFolder('storageware/THE-STORAGE')
 
--- Builds our config menu on the right side of our tab
+
 SaveManager:BuildConfigSection(Tabs['UI Settings'])
 
--- Builds our theme menu (with plenty of built in themes) on the left side
--- NOTE: you can also call ThemeManager:ApplyToGroupbox to add it to a specific groupbox
+
+
 ThemeManager:ApplyToTab(Tabs['UI Settings'])
 
--- You can use the SaveManager:LoadAutoloadConfig() to load a config
--- which has been marked to be one that auto loads!
+
+
 SaveManager:LoadAutoloadConfig()
