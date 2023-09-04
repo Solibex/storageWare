@@ -1,5 +1,10 @@
 local promptservice = game:GetService('ProximityPromptService')
 local players = game:GetService('Players')
+
+if getgenv().debug then
+    rconsolename('debug menu')
+end
+
 shared.callbacks = {}
 shared.resetfix = {}
 shared.hooked = {
