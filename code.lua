@@ -34,15 +34,10 @@ local Window = Library:CreateWindow({
     MenuFadeTime = 0.2
 })
 
-
-
 local Tabs = {
-    
     Main = Window:AddTab('Main'),
     ['UI Settings'] = Window:AddTab('UI Settings'),
 }
-
-
 
 local stuffbox = Tabs.Main:AddLeftGroupbox('stuff')
 local espbox = Tabs.Main:AddRightGroupbox('esp')
@@ -68,7 +63,6 @@ function esp(part, color)
             return
         end
     end
-    if part:FindFirstChild('pluh') then return end
     local a = Instance.new("BillboardGui",part)
     a.Name = "pluh"
     a.Size = UDim2.new(1,0, 1,0)
