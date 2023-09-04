@@ -373,50 +373,6 @@ stuffbox:AddToggle('autopickup', {
         end
     end
 })
-stuffbox:AddLabel('not recommended\ndue to annoying and uselessness')
-stuffbox:AddToggle('autoopen', {
-    Text = 'auto open door',
-    Default = false, 
-    Tooltip = 'open door nearby (instantly)', 
-
-    Callback = function(Value)
-        if Value == true then
-            if shared.callbacks['autoopen'] == nil then
-                do
-                    local cum = {}
-                    local thread = task.spawn(function()
-                        for _,v in ipairs(storages:GetChildren()) do
-                            for _,prompt in ipairs(v:GetDescendants()) do
-								if prompt.Name == 'Handle' and prompt:IsA('BasePart') then
-									table.insert(cum, prompt)
-								end
-							end
-                        end
-                        while task.wait() do
-                            for _,v in ipairs(cum) do
-								if (root.Position - v:GetPivot().Position).Magnitude > 75 then
-                                    continue
-                                end
-                                local prompt = v:FindFirstChild('ProximityPrompt', true)
-                                if prompt then
-                                    fireproximityprompt(prompt)
-                                end
-                            end
-                        end
-                    end)
-                    newprint('autoopen start')
-                    shared.callbacks['autoopen'] = function()
-                        task.cancel(thread)
-                        newprint('autopick cancel')
-                    end
-                end
-            end
-        elseif Value == false and shared.callbacks['autoopen'] then
-            shared.callbacks['autoopen']()
-            shared.callbacks['autoopen'] = nil
-        end
-    end
-})
 
 stuffbox:AddToggle('nolaser', {
     Text = 'no laser',
