@@ -276,27 +276,7 @@ espbox:AddToggle('npc_esp', {
                                             return
                                         end
                                     end
-                                    if part:FindFirstChild('pluh') then return end
-                                    local a = Instance.new("BillboardGui",part) 
-                                    a.Name = "pluh"
-                                    a.Size = UDim2.new(1,0, 1,0)
-                                    a.AlwaysOnTop = true
-                                    local b = Instance.new("Frame",a)
-                                    b.Size = UDim2.new(1,0, 1,0)
-                                    b.BackgroundTransparency = 0.50
-                                    b.BorderSizePixel = 0
-                                    b.BackgroundColor3 = Color3.new(0,0,255)
-                                    local d = Instance.new('UICorner', b)
-                                    d.CornerRadius = UDim.new(1, 0)
-                                    local c = Instance.new('TextLabel',b)
-                                    c.Size = UDim2.new(1,0,1,0)
-                                    c.BorderSizePixel = 0
-                                    c.TextSize = 20
-                                    c.Font = Enum.Font.RobotoMono
-                                    c.TextColor3 = Color3.new(0,0,255)
-                                    c.Text = part.Name
-									c.Position = UDim2.fromScale(0, -0.5)
-                                    c.BackgroundTransparency = 1
+                                    esp(part,Color3.new(0,0,255))
                                 end
                             end)
                         print('npc_esp start')
