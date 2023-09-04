@@ -21,7 +21,7 @@ local root = char:WaitForChild('HumanoidRootPart')
 players.LocalPlayer.CharacterAdded:Connect(function(character)
 	char = character
 	root = character:WaitForChild('HumanoidRootPart')
-	print('reset fix')
+	rconsoleprint('reset fix')
 	for i,v in pairs(shared.resetfix) do
 		shared.resetfix[i]()
 	end
@@ -59,7 +59,7 @@ if not fireproximityprompt or identifyexecutor() == "Electron" then
 	end
 	Library:Notify("fireproximityprompt bad, prompt required to be looked")
 else
-	print('fireproximityprompt good')
+	rconsoleprint('fireproximityprompt good')
 end
 function esp(part, color)
 	if part:FindFirstChild('pluh') then return end
@@ -97,8 +97,8 @@ stuffbox:AddToggle('instant_prompt', {
                         local connection = promptservice.PromptButtonHoldBegan:Connect(function(prompt)
                             prompt.HoldDuration = 0
                         end)
-                        print('instant_prompt start')
-                        shared.callbacks['instant_prompt'] = function() connection:Disconnect() print('instant_prompt cancel') end
+                        rconsoleprint('instant_prompt start')
+                        shared.callbacks['instant_prompt'] = function() connection:Disconnect() rconsoleprint('instant_prompt cancel') end
                     end)
                 end
             end
@@ -130,8 +130,8 @@ stuffbox:AddToggle('noslidecd', {
                                 end
                             end)
                         end
-                        print('noslidecd start')
-                        shared.callbacks['noslidecd'] = function() if shared.mathshit - time() > 0 then Library:Notify(('wait %.2fs until you could slide normally again'):format(mathshit - time())) end print('noslidecd cancel') end
+                        rconsoleprint('noslidecd start')
+                        shared.callbacks['noslidecd'] = function() if shared.mathshit - time() > 0 then Library:Notify(('wait %.2fs until you could slide normally again'):format(mathshit - time())) end rconsoleprint('noslidecd cancel') end
                     end)
                 end
             end
@@ -167,12 +167,12 @@ espbox:AddToggle('item_esp', {
                             end)
                             table.insert(shit, connection)
                         end
-                        print('item_esp start')
+                        rconsoleprint('item_esp start')
                         shared.callbacks['item_esp'] = function()
                             for _,v in ipairs(shit) do
                                 v:Disconnect()
                             end
-                            print('item_esp cancel')
+                            rconsoleprint('item_esp cancel')
                         end
                     end)
                 end
@@ -227,12 +227,12 @@ espbox:AddToggle('mob_esp', {
                             table.insert(shit, connection)
 							table.insert(shit, connection2)
                         end
-                        print('mob_esp start')
+                        rconsoleprint('mob_esp start')
                         shared.callbacks['mob_esp'] = function()
                             for _,v in ipairs(shit) do
                                 v:Disconnect()
                             end
-                            print('mob_esp cancel')
+                            rconsoleprint('mob_esp cancel')
                         end
                     end)
                 end
@@ -270,10 +270,10 @@ espbox:AddToggle('npc_esp', {
                             end
                             esp(part,Color3.new(0,0,255))
                         end)
-                        print('npc_esp start')
+                        rconsoleprint('npc_esp start')
                         shared.callbacks['npc_esp'] = function()
                             connection:Disconnect()
-                            print('npc_esp cancel')
+                            rconsoleprint('npc_esp cancel')
                         end
                     end)
                 end
@@ -313,12 +313,12 @@ espbox:AddToggle('third_person', {
                         players.LocalPlayer.CameraMaxZoomDistance = 20
                         table.insert(shit, connection)
                         table.insert(shit, connection2)
-                        print('third_person start')
+                        rconsoleprint('third_person start')
                         shared.callbacks['third_person'] = function()
                             for _,v in ipairs(shit) do
                                 v:Disconnect()
                             end
-                            print('third_person cancel')
+                            rconsoleprint('third_person cancel')
                         end
                     end)
                 end
@@ -369,13 +369,13 @@ stuffbox:AddToggle('autopickup', {
                             end
                         end
                     end)
-                    print('autopickup start')
+                    rconsoleprint('autopickup start')
                     shared.callbacks['autopickup'] = function()
                         for _,v in ipairs(shit) do
                             v:Disconnect()
                         end
 						task.cancel(thread)
-                        print('autopick cancel')
+                        rconsoleprint('autopick cancel')
                     end
                 end
             end
@@ -416,10 +416,10 @@ stuffbox:AddToggle('autoopen', {
                             end
                         end
                     end)
-                    print('autoopen start')
+                    rconsoleprint('autoopen start')
                     shared.callbacks['autoopen'] = function()
                         task.cancel(thread)
-                        print('autopick cancel')
+                        rconsoleprint('autopick cancel')
                     end
                 end
             end
@@ -449,13 +449,13 @@ stuffbox:AddToggle('nolaser', {
                             end)
                             table.insert(shit, connection)
                         end
-                        print('nolaser start')
+                        rconsoleprint('nolaser start')
                         shared.callbacks['nolaser'] = function()
 							for _,v in ipairs(shit) do
 								v:Disconnect()
 							end
                             task.cancel(thread)
-							print('nolaser cancel')
+							rconsoleprint('nolaser cancel')
 						end
                     end)
                 end
@@ -485,12 +485,12 @@ stuffbox:AddToggle('nodart', {
                             end)
                             table.insert(shit, connection)
                         end
-                        print('nodart start')
+                        rconsoleprint('nodart start')
                         shared.callbacks['nodart'] = function()
 							for _,v in ipairs(shit) do
 								v:Disconnect()
 							end
-							print('nodart cancel')
+							rconsoleprint('nodart cancel')
 						end
                     end)
                 end
@@ -501,17 +501,10 @@ stuffbox:AddToggle('nodart', {
         end
     end
 })
-stuffbox:AddLabel('Open safe'):AddKeyPicker('opensafe', {
-    
-    
-
-    
-    
+stuffbox:AddLabel('open safe'):AddKeyPicker('opensafe', {
 
     Default = 'Delete', 
     SyncToggleState = false,
-
-
     
     Mode = 'Toggle', 
 
@@ -523,28 +516,18 @@ stuffbox:AddLabel('Open safe'):AddKeyPicker('opensafe', {
         players.LocalPlayer.PlayerGui.HUD.Bank.Visible = Value
     end,
 
-    
     ChangedCallback = function(New)
-        print('[cb] Keybind changed!', New)
+        rconsoleprint('[cb] Keybind changed!', New)
     end
 })
 stuffbox:AddLabel('teleport to base'):AddKeyPicker('teleportbase', {
-    
-    
-
-    
-    
-
     Default = 'Home', 
     SyncToggleState = false,
-
-
     
     Mode = 'Toggle', 
 
     Text = 'Teleport to base', 
-    NoUI = true, 
-
+    NoUI = true,
     
     Callback = function(Value)
 		local founded = false
@@ -558,9 +541,8 @@ stuffbox:AddLabel('teleport to base'):AddKeyPicker('teleportbase', {
 		if founded == false then Library:Notify('no base detected') end
     end,
 
-    
     ChangedCallback = function(New)
-        print('[cb] Keybind changed!', New)
+        rconsoleprint('[cb] Keybind changed!', New)
     end
 })
 
@@ -596,7 +578,7 @@ Library:OnUnload(function()
         shared.callbacks[i]()
         shared.callbacks[i] = nil
     end
-    print('Unloaded!')
+    rconsoleprint('Unloaded!')
     Library.Unloaded = true
 end)
 
