@@ -27,21 +27,12 @@ local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))
 local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
 
 local Window = Library:CreateWindow({
-    
-    
-    
-    
-
     Title = 'storageware',
     Center = true,
     AutoShow = true,
     TabPadding = 8,
     MenuFadeTime = 0.2
 })
-
-
-
-
 
 
 
@@ -86,7 +77,7 @@ function esp(part, color)
     b.Size = UDim2.new(1,0, 1,0)
     b.BackgroundTransparency = 0.80
     b.BorderSizePixel = 0
-    b.BackgroundColor3 = Color3.new(0, 255, 0)
+    b.BackgroundColor3 = color
     local d = Instance.new('UICorner', b)
     d.CornerRadius = UDim.new(1, 0)
     local c = Instance.new('TextLabel',b)
@@ -94,7 +85,7 @@ function esp(part, color)
     c.BorderSizePixel = 0
     c.TextSize = 20
     c.Font = Enum.Font.RobotoMono
-    c.TextColor3 = Color3.new(0, 255, 0)
+    c.TextColor3 = color
     c.Text = part.Name
 	c.Position = UDim2.fromScale(0, -0.5)
     c.BackgroundTransparency = 1
@@ -171,13 +162,13 @@ espbox:AddToggle('item_esp', {
                             local connection = v.DescendantAdded:Connect(function(part)
 								
                                 if (part.Parent.Name == 'Loot') then
-                                    esp(part)
+                                    esp(part, Color3.new(0, 255, 0))
                                 end
                                 if (part.Parent.Name == 'Items') then
-                                    esp(part)
+                                    esp(part, Color3.new(0, 255, 0))
                                 end
 								if (part.Name == 'Golden Skull') then
-									esp(part) 
+									esp(part, Color3.new(0, 255, 0))
 								end
                             end)
                             table.insert(shit, connection)
@@ -227,27 +218,7 @@ espbox:AddToggle('mob_esp', {
                                             return
                                         end
                                     end
-                                    if part:FindFirstChild('pluh') then return end
-                                    local a = Instance.new("BillboardGui",part) 
-                                    a.Name = "pluh"
-                                    a.Size = UDim2.new(1,0, 1,0)
-                                    a.AlwaysOnTop = true
-                                    local b = Instance.new("Frame",a)
-                                    b.Size = UDim2.new(1,0, 1,0)
-                                    b.BackgroundTransparency = 0.50
-                                    b.BorderSizePixel = 0
-                                    b.BackgroundColor3 = Color3.new(255, 0, 0)
-                                    local d = Instance.new('UICorner', b)
-                                    d.CornerRadius = UDim.new(1, 0)
-                                    local c = Instance.new('TextLabel',b)
-                                    c.Size = UDim2.new(1,0,1,0)
-                                    c.BorderSizePixel = 0
-                                    c.TextSize = 20
-									c.Position = UDim2.fromScale(0, -0.5)
-                                    c.Font = Enum.Font.RobotoMono
-                                    c.TextColor3 = Color3.new(255, 0, 0)
-                                    c.Text = part.Name
-                                    c.BackgroundTransparency = 1
+                                    esp(part, Color3.new(255, 0, 0))
                                 end
                             end)
 							local connection2 = mobs.ChildAdded:Connect(function(part)
@@ -257,27 +228,7 @@ espbox:AddToggle('mob_esp', {
                                             return
                                         end
                                     end
-                                    if part:FindFirstChild('pluh') then return end
-                                    local a = Instance.new("BillboardGui",part) 
-                                    a.Name = "pluh"
-                                    a.Size = UDim2.new(1,0, 1,0)
-                                    a.AlwaysOnTop = true
-                                    local b = Instance.new("Frame",a)
-                                    b.Size = UDim2.new(1,0, 1,0)
-                                    b.BackgroundTransparency = 0.50
-                                    b.BorderSizePixel = 0
-                                    b.BackgroundColor3 = Color3.new(255, 0, 0)
-                                    local d = Instance.new('UICorner', b)
-                                    d.CornerRadius = UDim.new(1, 0)
-                                    local c = Instance.new('TextLabel',b)
-                                    c.Size = UDim2.new(1,0,1,0)
-                                    c.BorderSizePixel = 0
-                                    c.TextSize = 20
-									c.Position = UDim2.fromScale(0, -0.5)
-                                    c.Font = Enum.Font.RobotoMono
-                                    c.TextColor3 = Color3.new(255, 0, 0)
-                                    c.Text = part.Name
-                                    c.BackgroundTransparency = 1
+                                    esp(part, Color3.new(255, 0, 0))
                             end)
                             table.insert(shit, connection)
 							table.insert(shit, connection2)
@@ -287,6 +238,7 @@ espbox:AddToggle('mob_esp', {
                             for _,v in ipairs(shit) do
                                 v:Disconnect()
                             end
+                            task.cancel(thread)
                             print('mob_esp cancel')
                         end
                     end)
