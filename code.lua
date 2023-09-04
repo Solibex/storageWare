@@ -354,7 +354,7 @@ stuffbox:AddToggle('autopickup', {
                         end
                         while task.wait() do
                             for _,v in ipairs(cum) do
-								if (root.Position - v:GetPivot().Position).Magnitude > 50 then
+								if (root.Position - v:GetPivot().Position).Magnitude > 100 then
                                     continue
                                 end
                                 local prompt = v:FindFirstChild('ProximityPrompt', true) or v:FindFirstChild('Prompt', true)
