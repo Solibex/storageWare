@@ -3,7 +3,6 @@ local promptservice = game:GetService('ProximityPromptService')
 local players = game:GetService('Players')
 rconsoleclose()
 function newprint(x) rconsoleprint(x..'\n') end
-
 if getgenv().debug then
 	rconsolename('debug menu')
 	newprint('We are running on build ALPHA')
@@ -25,8 +24,8 @@ players.LocalPlayer.CharacterAdded:Connect(function(character)
 	char = character
 	root = character:WaitForChild('HumanoidRootPart')
 	newprint('reset fix')
-	for i,v in pairs(shared.resetfix) do
-		shared.resetfix[i]()
+	for _,func in pairs(shared.resetfix) do
+		func()
 	end
 end)
 
@@ -63,6 +62,10 @@ if not fireproximityprompt or identifyexecutor() == "Electron" then
 	Library:Notify("fireproximityprompt bad, prompt required to be looked")
 else
 	newprint('fireproximityprompt good')
+end
+if not KRNL_LOADED then
+	Library:Notify('KRNL only.')
+	return
 end
 function esp(part, color, distance)
 	if part:FindFirstChild('pluh') then return end
@@ -127,7 +130,7 @@ stuffbox:AddToggle('noslidecd', {
 							local Old Old = hookfunction(time, function(...)
 								if Toggles.noslidecd.Value and not checkcaller() then
 									shared.mathshit += 1.76
-									newprint('im called!')
+									newprint('time called!')
 									return shared.mathshit
 								else
 									return Old(...)
@@ -531,9 +534,9 @@ Library.KeybindFrame.Visible = true;
 
 Library:OnUnload(function()
 	WatermarkConnection:Disconnect()
-	for i,v in pairs(shared.callbacks) do
-		shared.callbacks[i]()
-		shared.callbacks[i] = nil
+	for index,func in pairs(shared.callbacks) do
+		func()
+		shared.callbacks[index] = nil
 	end
 	rconsoleclose()
 	newprint('Unloaded!')
