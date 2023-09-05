@@ -161,13 +161,13 @@ espbox:AddToggle('item_esp', {
 							local connection = v.DescendantAdded:Connect(function(part)
 								
 								if (part.Parent.Name == 'Loot') then
-									esp(part, Color3.new(0, 255, 0))
+									esp(part, Color3.new(0, 255, 0), Options.itemesp_distance.Value)
 								end
 								if (part.Parent.Name == 'Items') then
-									esp(part, Color3.new(0, 255, 0))
+									esp(part, Color3.new(0, 255, 0), Options.itemesp_distance.Value)
 								end
 								if (part.Name == 'Golden Skull') then
-									esp(part, Color3.new(0, 255, 0))
+									esp(part, Color3.new(0, 255, 0), Options.itemesp_distance.Value)
 								end
 							end)
 							table.insert(shit, connection)
