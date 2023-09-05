@@ -167,16 +167,16 @@ espbox:AddToggle('item_esp', {
 					local thread = task.spawn(function()
 						for _,v in ipairs(storages:GetChildren()) do
 							local connection = v.DescendantAdded:Connect(function(part)
-								
-								if (part.Parent.Name == 'Loot') then
-									esp(part, Color3.new(0, 255, 0), Options.itemesp_distance.Value)
+								if (part.Parent.Name ~= 'Loot') then
+									return
 								end
-								if (part.Parent.Name == 'Items') then
-									esp(part, Color3.new(0, 255, 0), Options.itemesp_distance.Value)
+								if (part.Parent.Name ~= 'Items') then
+									return
 								end
-								if (part.Name == 'Golden Skull') then
-									esp(part, Color3.new(0, 255, 0), Options.itemesp_distance.Value)
+								if (part.Name ~= 'Golden Skull') then
+									return
 								end
+								esp(part, Color3.new(0, 255, 0), Options.itemesp_distance.Value)
 							end)
 							table.insert(shit, connection)
 						end
