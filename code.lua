@@ -289,8 +289,8 @@ espbox:AddToggle('third_person', {
 		if Value == true then
 			if shared.callbacks['third_person'] == nil then
 				do
+					local shit = {}
 					local thread = task.spawn(function()
-						local shit = {}
 						for _=1, 2 do
 							local loop = task.spawn(function()
 								while task.wait() do
@@ -302,13 +302,13 @@ espbox:AddToggle('third_person', {
 							table.insert(shit, loop)
 						end
 						newprint('third_person start')
-						shared.callbacks['third_person'] = function()
-							for _,v in ipairs(shit) do
-								v:Disconnect()
-							end
-							newprint('third_person cancel')
-						end
 					end)
+					shared.callbacks['third_person'] = function()
+						for _,v in ipairs(shit) do
+							v:Disconnect()
+						end
+						newprint('third_person cancel')
+					end
 				end
 			end
 		elseif Value == false and shared.callbacks['third_person'] then
