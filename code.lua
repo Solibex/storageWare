@@ -128,6 +128,7 @@ stuffbox:AddToggle('noslidecd', {
 							local Old Old = hookfunction(time, function(...)
 								if Toggles.noslidecd.Value and not checkcaller() then
 									shared.mathshit += 1.76
+									newprint('im called!')
 									return shared.mathshit
 								else
 									return Old(...)
@@ -154,8 +155,8 @@ espbox:AddToggle('item_esp', {
 		if Value == true then
 			if shared.callbacks['item_esp'] == nil then
 				do
+					local shit = {}
 					local thread = task.spawn(function()
-						local shit = {}
 						for _,v in ipairs(storages:GetChildren()) do
 							local connection = v.DescendantAdded:Connect(function(part)
 								
@@ -172,13 +173,14 @@ espbox:AddToggle('item_esp', {
 							table.insert(shit, connection)
 						end
 						newprint('item_esp start')
-						shared.callbacks['item_esp'] = function()
-							for _,v in ipairs(shit) do
-								v:Disconnect()
-							end
-							newprint('item_esp cancel')
-						end
 					end)
+					shared.callbacks['item_esp'] = function()
+						for _,v in ipairs(shit) do
+							v:Disconnect()
+						end
+						newprint('item_esp cancel')
+						task.cancel(thread)
+					end
 				end
 			end
 		elseif Value == false and shared.callbacks['item_esp'] then
@@ -205,8 +207,8 @@ espbox:AddToggle('mob_esp', {
 		if Value == true then
 			if shared.callbacks['mob_esp'] == nil then
 				do
+					local shit = {}
 					local thread = task.spawn(function()
-						local shit = {}
 						for _,v in ipairs(storages:GetChildren()) do
 							local connection = v.DescendantAdded:Connect(function(part)
 								if (part.Parent.Name == 'Mobs') then
@@ -220,13 +222,14 @@ espbox:AddToggle('mob_esp', {
 							table.insert(shit, connection2)
 						end
 						newprint('mob_esp start')
-						shared.callbacks['mob_esp'] = function()
-							for _,v in ipairs(shit) do
-								v:Disconnect()
-							end
-							newprint('mob_esp cancel')
-						end
 					end)
+					shared.callbacks['mob_esp'] = function()
+						for _,v in ipairs(shit) do
+							v:Disconnect()
+						end
+						newprint('mob_esp cancel')
+						task.cancel(thread)
+					end
 				end
 			end
 		elseif Value == false and shared.callbacks['mob_esp'] then
@@ -252,18 +255,21 @@ espbox:AddToggle('npc_esp', {
 		if Value == true then
 			if shared.callbacks['npc_esp'] == nil then
 				do
+					local connection
 					local thread = task.spawn(function()
-						local shit = {}
-						local connection = workspace.DescendantAdded:Connect(function(part)
+						connection = workspace.DescendantAdded:Connect(function(part)
 							if part.Parent.Name ~= 'NPC' then return end
 							esp(part,Color3.new(0,0,255), Options.npcesp_distance.Value)
 						end)
 						newprint('npc_esp start')
-						shared.callbacks['npc_esp'] = function()
-							connection:Disconnect()
-							newprint('npc_esp cancel')
-						end
 					end)
+					shared.callbacks['npc_esp'] = function()
+						if connection then
+							connection:Disconnect()
+						end
+						newprint('npc_esp cancel')
+						task.cancel(thread)
+					end
 				end
 			end
 		elseif Value == false and shared.callbacks['npc_esp'] then
