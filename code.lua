@@ -313,6 +313,7 @@ espbox:AddToggle('third_person', {
 						for _,v in ipairs(shit) do
 							v:Disconnect()
 						end
+						task.cancel(thread)
 						newprint('third_person cancel')
 					end
 				end
