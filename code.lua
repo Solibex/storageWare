@@ -219,9 +219,8 @@ espbox:AddToggle('mob_esp', {
 					local thread = task.spawn(function()
 						for _,v in ipairs(storages:GetChildren()) do
 							local connection = v.DescendantAdded:Connect(function(part)
-								if (part.Parent.Name == 'Mobs') then
-									esp(part, Color3.new(255, 0, 0), Options.mobesp_distance.Value)
-								end
+								if part.Parent.Name ~= 'Mobs' then return end
+								esp(part, Color3.new(255, 0, 0), Options.mobesp_distance.Value)
 							end)
 							local connection2 = mobs.ChildAdded:Connect(function(part)
 								esp(part, Color3.new(255, 0, 0), Options.mobesp_distance.Value)
