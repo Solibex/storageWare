@@ -1,7 +1,7 @@
 getgenv().debug = true
 local promptservice = game:GetService('ProximityPromptService')
 local players = game:GetService('Players')
-
+rconsoleclose()
 function newprint(x) rconsoleprint(x..'\n') end
 
 if getgenv().debug then
@@ -123,7 +123,6 @@ stuffbox:AddToggle('noslidecd', {
 				do
 					local thread = task.spawn(function()
 						shared.mathshit = time()
-						shared.hooked.noslidecd = true
 						if shared.hooked.noslidecd == false then
 							local Old Old = hookfunction(time, function(...)
 								if Toggles.noslidecd.Value and not checkcaller() then
@@ -134,6 +133,7 @@ stuffbox:AddToggle('noslidecd', {
 									return Old(...)
 								end
 							end)
+							shared.hooked.noslidecd = true
 						end
 						newprint('noslidecd start')
 						shared.callbacks['noslidecd'] = function() if shared.mathshit - time() > 0 then Library:Notify(('wait %.2fs until you could slide normally again'):format(mathshit - time())) end newprint('noslidecd cancel') end
