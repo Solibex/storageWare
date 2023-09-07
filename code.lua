@@ -334,7 +334,7 @@ espbox:AddToggle('third_person', {
 stuffbox:AddToggle('autopickup', {
 	Text = 'auto pick up',
 	Default = false, 
-	Tooltip = 'pick up item nearby (recommended to do it manually)', 
+	Tooltip = 'pick up item nearby (recommended to do it manually if you want to look legit?)', 
 
 	Callback = function(Value)
 		if Value == true then
@@ -354,7 +354,7 @@ stuffbox:AddToggle('autopickup', {
 							end)
 							local connection2 = storage.DescendantRemoving:Connect(function(part)
 								if part:GetAttribute('autopickup_registered') then
-									table.remove(cum, table.find(part))
+									table.remove(cum, table.find(cum, part))
 								end
 							end)
 							table.insert(shit, connection)
