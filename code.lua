@@ -14,6 +14,8 @@ shared.hooked = {
 	noslidecd = false
 }
 
+
+
 local storages = workspace:WaitForChild('Storages')
 local mobs = workspace:WaitForChild('Mobs')
 
@@ -167,7 +169,13 @@ espbox:AddToggle('item_esp', {
 					local thread = task.spawn(function()
 						for _,v in ipairs(storages:GetChildren()) do
 							local connection = v.DescendantAdded:Connect(function(part)
-								if (part.Parent.Name == 'Loot') or (part.Parent.Name ~= 'Items') or (part.Name ~= 'Golden Skull') then
+								if (part.Parent.Name == 'Loot') then
+                                    esp(part, Color3.new(0, 255, 0), Options.itemesp_distance.Value)
+                                end
+                                if (part.Parent.Name == 'Items') then
+                                    esp(part, Color3.new(0, 255, 0), Options.itemesp_distance.Value)
+                                end
+								if (part.Name == 'Golden Skull') then
 									esp(part, Color3.new(0, 255, 0), Options.itemesp_distance.Value)
 								end
 							end)
