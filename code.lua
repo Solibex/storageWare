@@ -352,11 +352,13 @@ stuffbox:AddToggle('autopickup', {
 									newprint(part.Name..' registered value-'..tostring(part:GetAttribute('autopickup_registered')))
 								end
 							end)
+							
 							local connection2 = storage.DescendantRemoving:Connect(function(part)
 								if part:GetAttribute('autopickup_registered') then
 									table.remove(cum, table.find(cum, part))
 								end
 							end)
+
 							table.insert(shit, connection)
 							table.insert(shit, connection2)
 						end
