@@ -342,6 +342,7 @@ stuffbox:AddToggle('autopickup', {
 				do
 					local shit = {}
 					local cum = {}
+
 					local thread = task.spawn(function()
 						for _,storage in ipairs(storages:GetChildren()) do
 							local connection = storage.DescendantAdded:Connect(function(part)
@@ -398,6 +399,7 @@ stuffbox:AddToggle('nolaser', {
 			if shared.callbacks['nolaser'] == nil then
 				do
 					local shit = {}
+
 					local thread = task.spawn(function()
 						for _,storage in ipairs(storages:GetChildren()) do
 							local connection = storage.DescendantAdded:Connect(function(part)
@@ -409,6 +411,7 @@ stuffbox:AddToggle('nolaser', {
 						end
 						newprint('nolaser start')
 					end)
+
 					shared.callbacks['nolaser'] = function()
 						for _,v in ipairs(shit) do
 							v:Disconnect()
@@ -434,6 +437,7 @@ stuffbox:AddToggle('nodart', {
 			if shared.callbacks['nodart'] == nil then
 				do
 					local shit = {}
+
 					local thread = task.spawn(function()
 						for _,v in ipairs(storages:GetChildren()) do
 							local connection = v.DescendantAdded:Connect(function(part)
@@ -445,11 +449,13 @@ stuffbox:AddToggle('nodart', {
 						end
 						newprint('nodart start')
 					end)
+
 					shared.callbacks['nodart'] = function()
 						for _,v in ipairs(shit) do
 							v:Disconnect()
 						end
 						newprint('nodart cancel')
+						task.cancel(thread)
 					end
 				end
 			end
@@ -469,7 +475,6 @@ stuffbox:AddLabel('open safe'):AddKeyPicker('opensafe', {
 	Text = 'Open safe', 
 	NoUI = false, 
 
-	
 	Callback = function(Value)
 		players.LocalPlayer.PlayerGui.HUD.Bank.Visible = Value
 	end,
