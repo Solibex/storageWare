@@ -145,7 +145,6 @@ stuffbox:AddToggle('noslidecd', {
 							if shared.mathshit - time() >= 0 then
 								Library:Notify(('wait %.2fs until you could slide normally again'):format(mathshit - time()))
 							end
-							shared.mathshit = time()
 							newprint('noslidecd cancel')
 						end
 					end)
