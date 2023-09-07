@@ -352,7 +352,7 @@ stuffbox:AddToggle('autopickup', {
 									newprint(part.Name..' registered value-'..tostring(part:GetAttribute('autopickup_registered')))
 								end
 							end)
-							
+
 							local connection2 = storage.DescendantRemoving:Connect(function(part)
 								if part:GetAttribute('autopickup_registered') then
 									table.remove(cum, table.find(cum, part))
@@ -374,12 +374,15 @@ stuffbox:AddToggle('autopickup', {
 							end
 						end
 					end)
+
 					newprint('autopickup start')
+					
 					shared.callbacks['autopickup'] = function()
+						task.cancel(thread)
 						for _,v in ipairs(shit) do
 							v:Disconnect()
 						end
-						task.cancel(thread)
+
 						newprint('autopick cancel')
 					end
 				end
