@@ -496,7 +496,7 @@ stuffbox:AddLabel('teleport to base'):AddKeyPicker('teleportbase', {
 		local founded = false
 		for _,v in ipairs(storages:GetChildren()) do
 			if v:GetAttribute("Owner") and v:GetAttribute("Owner") == players.LocalPlayer.Name then
-				Library:Notify('Teleporting')
+				Library:Notify('Teleporting to base')
 				root:PivotTo(v:GetPivot())
 				founded = true
 			end
