@@ -167,16 +167,9 @@ espbox:AddToggle('item_esp', {
 					local thread = task.spawn(function()
 						for _,v in ipairs(storages:GetChildren()) do
 							local connection = v.DescendantAdded:Connect(function(part)
-								if (part.Parent.Name ~= 'Loot') then
-									return
+								if (part.Parent.Name == 'Loot') or (part.Parent.Name ~= 'Items') or (part.Name ~= 'Golden Skull') then
+									esp(part, Color3.new(0, 255, 0), Options.itemesp_distance.Value)
 								end
-								if (part.Parent.Name ~= 'Items') then
-									return
-								end
-								if (part.Name ~= 'Golden Skull') then
-									return
-								end
-								esp(part, Color3.new(0, 255, 0), Options.itemesp_distance.Value)
 							end)
 							table.insert(shit, connection)
 						end
@@ -376,7 +369,7 @@ stuffbox:AddToggle('autopickup', {
 					end)
 
 					newprint('autopickup start')
-					
+
 					shared.callbacks['autopickup'] = function()
 						task.cancel(thread)
 						for _,v in ipairs(shit) do
