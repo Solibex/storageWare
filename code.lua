@@ -343,17 +343,16 @@ stuffbox:AddToggle('autopickup', {
 					local shit = {}
 					local cum = {}
 					local thread = task.spawn(function()
-						for _,v in ipairs(storages:GetChildren()) do
-							local connection = v.DescendantAdded:Connect(function(part)
+						for _,storage in ipairs(storages:GetChildren()) do
+							local connection = storage.DescendantAdded:Connect(function(part)
 								if (part.Parent.Name == 'Loot') or (part.Parent.Name == 'Items') or (part.Name == "Golden Skull") then
 									table.insert(cum, part)
+									part:SetAttribute('autopickup_registered', true)
 								end
 							end)
-							local connection2 = v.DescendantRemoving:Connect(function(part)
-								for i,v in ipairs(cum) do
-									if v == part then
-										table.remove(cum, i)
-									end
+							local connection2 = storage.DescendantRemoving:Connect(function(part)
+								if part:GetAttribute('autopickup_registered') then
+									table.remove(cum, table.find(part))
 								end
 							end)
 							table.insert(shit, connection)
