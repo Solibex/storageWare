@@ -399,10 +399,9 @@ stuffbox:AddToggle('nolaser', {
 				do
 					local shit = {}
 					local thread = task.spawn(function()
-						for _,v in ipairs(storages:GetChildren()) do
-							local connection = v.DescendantAdded:Connect(function(part)
+						for _,storage in ipairs(storages:GetChildren()) do
+							local connection = storage.DescendantAdded:Connect(function(part)
 								if (part.Parent.Name == 'Kill') then
-									part.Parent:Clone()
 									part.Parent:Destroy()
 								end
 							end)
@@ -434,8 +433,8 @@ stuffbox:AddToggle('nodart', {
 		if Value == true then
 			if shared.callbacks['nodart'] == nil then
 				do
+					local shit = {}
 					local thread = task.spawn(function()
-						local shit = {}
 						for _,v in ipairs(storages:GetChildren()) do
 							local connection = v.DescendantAdded:Connect(function(part)
 								if (part.Parent.Name == 'Wire') then
@@ -445,13 +444,13 @@ stuffbox:AddToggle('nodart', {
 							table.insert(shit, connection)
 						end
 						newprint('nodart start')
-						shared.callbacks['nodart'] = function()
-							for _,v in ipairs(shit) do
-								v:Disconnect()
-							end
-							newprint('nodart cancel')
-						end
 					end)
+					shared.callbacks['nodart'] = function()
+						for _,v in ipairs(shit) do
+							v:Disconnect()
+						end
+						newprint('nodart cancel')
+					end
 				end
 			end
 		elseif Value == false and shared.callbacks['nodart'] then
