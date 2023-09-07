@@ -348,6 +348,7 @@ stuffbox:AddToggle('autopickup', {
 								if (part.Parent.Name == 'Loot') or (part.Parent.Name == 'Items') or (part.Name == "Golden Skull") then
 									table.insert(cum, part)
 									part:SetAttribute('autopickup_registered', true)
+									newprint(part.Name..' registered value-'..part:GetAttribute('autopickup_registered'))
 								end
 							end)
 							local connection2 = storage.DescendantRemoving:Connect(function(part)
