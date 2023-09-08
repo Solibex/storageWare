@@ -218,15 +218,13 @@ espbox:AddToggle('mob_esp', {
 					local shit = {}
 					local thread = task.spawn(function()
 						for _,v in ipairs(storages:GetChildren()) do
-							local connection = v.DescendantAdded:Connect(function(part)
+							table.insert(shit, v.DescendantAdded:Connect(function(part)
 								if part.Parent.Name ~= 'Mobs' then return end
 								esp(part, Color3.new(255, 0, 0), Options.mobesp_distance.Value)
-							end)
-							local connection2 = mobs.ChildAdded:Connect(function(part)
+							end))
+							table.insert(shit, mobs.ChildAdded:Connect(function(part)
 								esp(part, Color3.new(255, 0, 0), Options.mobesp_distance.Value)
-							end)
-							table.insert(shit, connection)
-							table.insert(shit, connection2)
+							end))
 						end
 						newprint('mob_esp start')
 					end)
@@ -499,6 +497,7 @@ espbox:AddToggle('rainbowchar', {
                     end)
 					shared.callbacks['rainbowchar'] = function()
 						shared.resetfix['rainbowchar'] = nil
+						task.cancel(thread)
 						print('rainbowchar cancel')
 					end
                 end
