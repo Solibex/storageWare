@@ -7,7 +7,8 @@ if getgenv().debug then
 	rconsolename('debug menu')
 	newprint('We are running on build ALPHA')
 end
-
+local hue = 0
+local delta = 0.05
 shared.callbacks = {}
 shared.resetfix = {}
 shared.hooked = {
@@ -465,6 +466,83 @@ stuffbox:AddToggle('nodart', {
 			shared.callbacks['nodart'] = nil
 		end
 	end
+})
+espbox:AddToggle('rainbowchar', {
+    Text = 'character rainbow',
+    Default = false, -- Default value (true / false)
+    Tooltip = 'make your entire character rainbow', -- Information shown when you hover over the toggle
+
+    Callback = function(Value)
+        if Value == true then
+            if shared.callbacks['rainbowchar'] == nil then
+                do
+                    local thread = task.spawn(function()
+						local rainbowresetfix = function()
+							repeat wait() until char
+							while char do
+								hue += delta
+								 for i, v in ipairs(char:GetChildren()) do
+									if v:IsA("MeshPart") then
+										v.Color = Color3.fromHSV(hue,1,1)
+										wait()
+									end
+								end 
+								if hue >= 1 then
+									hue = 0
+								end
+							end
+							print('rainbowchar run')
+						end
+						rainbowresetfix()
+						table.insert(shared.resetfix, rainbowresetfix)
+                        print('rainbowchar start')
+                    end)
+					shared.callbacks['rainbowchar'] = function()
+						shared.resetfix['rainbowchar'] = nil
+						print('rainbowchar cancel')
+					end
+                end
+            end
+        elseif Value == false and shared.callbacks['rainbowchar'] then
+            shared.callbacks['rainbowchar']()
+            shared.callbacks['rainbowchar'] = nil
+        end
+    end
+})
+espbox:AddToggle('forcefieldchar', {
+    Text = 'character forcefield',
+    Default = false, -- Default value (true / false)
+    Tooltip = 'make your entire character forcefield', -- Information shown when you hover over the toggle
+
+    Callback = function(Value)
+        if Value == true then
+            if shared.callbacks['forcefieldchar'] == nil then
+                do
+                    local thread = task.spawn(function()
+						local forcefieldresetfix = function()
+							repeat wait() until char
+							for i, v in ipairs(char:GetChildren()) do
+								if v:IsA("BasePart") then
+									v.Material = Enum.Material.ForceField
+								end
+							end
+							print('force field run')
+						end
+						forcefieldresetfix()
+						table.insert(shared.resetfix, forcefieldresetfix)
+                        print('forcefieldchar start')
+                    end)
+					shared.callbacks['forcefieldchar'] = function()
+						shared.resetfix['forcefieldchar'] = nil
+						print('forcefieldchar cancel')
+					end
+                end
+            end
+        elseif Value == false and shared.callbacks['forcefieldchar'] then
+            shared.callbacks['forcefieldchar']()
+            shared.callbacks['forcefieldchar'] = nil
+        end
+    end
 })
 stuffbox:AddLabel('open safe'):AddKeyPicker('opensafe', {
 
