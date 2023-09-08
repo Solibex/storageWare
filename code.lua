@@ -320,7 +320,7 @@ espbox:AddToggle('third_person', {
 							task.cancel(v)
 						end
 						task.cancel(thread)
-						
+
 						newprint('third_person cancel')
 					end
 				end
@@ -345,22 +345,19 @@ stuffbox:AddToggle('autopickup', {
 
 					local thread = task.spawn(function()
 						for _,storage in ipairs(storages:GetChildren()) do
-							local connection = storage.DescendantAdded:Connect(function(part)
+							table.insert(shit, storage.DescendantAdded:Connect(function(part)
 								if (part.Parent.Name == 'Loot') or (part.Parent.Name == 'Items') or (part.Name == "Golden Skull") then
 									table.insert(cum, part)
 									part:SetAttribute('autopickup_registered', true)
 									newprint(part.Name..' '..part.Parent.Name..' registered value-'..tostring(part:GetAttribute('autopickup_registered')))
 								end
-							end)
+							end))
 
-							local connection2 = storage.DescendantRemoving:Connect(function(part)
+							table.insert(shit, storage.DescendantRemoving:Connect(function(part)
 								if part:GetAttribute('autopickup_registered') then
 									table.remove(cum, table.find(cum, part))
 								end
-							end)
-
-							table.insert(shit, connection)
-							table.insert(shit, connection2)
+							end))
 						end
 						while task.wait() do
 							for _,v in ipairs(cum) do
@@ -407,13 +404,13 @@ stuffbox:AddToggle('nolaser', {
 
 					local thread = task.spawn(function()
 						for _,storage in ipairs(storages:GetChildren()) do
-							local connection = storage.DescendantAdded:Connect(function(part)
+							table.insert(shit, storage.DescendantAdded:Connect(function(part)
 								if (part.Parent.Name == 'Kill') then
 									part.Parent:Destroy()
 								end
-							end)
-							table.insert(shit, connection)
+							end))
 						end
+
 						newprint('nolaser start')
 					end)
 
@@ -445,12 +442,11 @@ stuffbox:AddToggle('nodart', {
 
 					local thread = task.spawn(function()
 						for _,v in ipairs(storages:GetChildren()) do
-							local connection = v.DescendantAdded:Connect(function(part)
+							table.insert(shit, v.DescendantAdded:Connect(function(part)
 								if (part.Parent.Name == 'Wire') then
 									part.Parent:Destroy()
 								end
-							end)
-							table.insert(shit, connection)
+							end))
 						end
 						newprint('nodart start')
 					end)
@@ -498,15 +494,14 @@ stuffbox:AddLabel('teleport to base'):AddKeyPicker('teleportbase', {
 	NoUI = true,
 	
 	Callback = function(Value)
-		local founded = false
 		for _,v in ipairs(storages:GetChildren()) do
 			if v:GetAttribute("Owner") and v:GetAttribute("Owner") == players.LocalPlayer.Name then
 				Library:Notify('Teleporting to base')
 				root:PivotTo(v:GetPivot())
-				founded = true
+				return
 			end
 		end
-		if founded == false then Library:Notify('no base detected') end
+		Library:Notify('no base detected')
 	end,
 
 	ChangedCallback = function(New)
