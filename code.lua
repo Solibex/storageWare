@@ -14,7 +14,8 @@ shared.hooked = {
 	noslidecd = false
 }
 
-
+local Hook = Krnl:Require('Hook')
+print(Hook)
 
 local storages = workspace:WaitForChild('Storages')
 local mobs = workspace:WaitForChild('Mobs')
@@ -33,6 +34,11 @@ end)
 
 local repo = 'https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/'
 local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
+if not KRNL_LOADED then
+	Library:Notify('KRNL only.')
+	return
+end
+
 local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
 local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
 
@@ -64,10 +70,6 @@ if not fireproximityprompt or identifyexecutor() == "Electron" then
 	Library:Notify("fireproximityprompt bad, prompt required to be looked")
 else
 	newprint('fireproximityprompt good')
-end
-if not KRNL_LOADED then
-	Library:Notify('KRNL only.')
-	return
 end
 function esp(part, color, distance)
 	if part:FindFirstChild('pluh') then return end
