@@ -14,9 +14,6 @@ shared.hooked = {
 	noslidecd = false
 }
 
-local Hook = Krnl:Require('Hook')
-print(Hook)
-
 local storages = workspace:WaitForChild('Storages')
 local mobs = workspace:WaitForChild('Mobs')
 
@@ -35,8 +32,7 @@ end)
 local repo = 'https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/'
 local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
 if not KRNL_LOADED then
-	Library:Notify('KRNL only.')
-	return
+	Library:Notify('KRNL recommended')
 end
 
 local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
