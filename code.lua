@@ -320,6 +320,7 @@ espbox:AddToggle('third_person', {
 							task.cancel(v)
 						end
 						task.cancel(thread)
+						
 						newprint('third_person cancel')
 					end
 				end
