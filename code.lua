@@ -1,4 +1,4 @@
-getgenv().debug = true
+getgenv().debug = false
 local promptservice = game:GetService('ProximityPromptService')
 local players = game:GetService('Players')
 rconsoleclose()
