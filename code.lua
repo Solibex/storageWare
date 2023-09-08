@@ -317,7 +317,7 @@ espbox:AddToggle('third_person', {
 					end)
 					shared.callbacks['third_person'] = function()
 						for _,v in ipairs(shit) do
-							v:Disconnect()
+							task.cancel(v)
 						end
 						task.cancel(thread)
 						newprint('third_person cancel')
