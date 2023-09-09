@@ -3,6 +3,7 @@ local promptservice = game:GetService('ProximityPromptService')
 local players = game:GetService('Players')
 rconsoleclose()
 function newprint(x) rconsoleprint(x..'\n') end
+function empty() end
 if getgenv().debug then
 	rconsolename('debug menu')
 	newprint('We are running on build ALPHA')
@@ -329,6 +330,19 @@ espbox:AddToggle('third_person', {
 			shared.callbacks['third_person'] = nil
 		end
 	end
+})stuffbox:AddLabel('third person'):AddKeyPicker('thirdperson', {
+
+	Default = 'V', 
+	SyncToggleState = true,
+	
+	Mode = 'Toggle', 
+
+	Text = 'Open safe', 
+	NoUI = false, 
+
+	Callback = empty,
+
+	ChangedCallback = empty
 })
 stuffbox:AddToggle('autopickup', {
 	Text = 'auto pick up',
