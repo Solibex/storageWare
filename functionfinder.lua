@@ -1,4 +1,4 @@
--- Krnl Monaco v2rconsolename('debug getgc table')
+-- check workspace for functions!1
 writefile('testing.LOL', '')
 for i,v in getgc(false) do
 	if type(v) == 'function' and (getfenv(v).script.Name == 'Client' or getfenv(v).script.Name == 'Utilities') then
