@@ -337,7 +337,7 @@ espbox:AddToggle('third_person', {
 	
 	Mode = 'Toggle', 
 
-	Text = 'Open safe', 
+	Text = 'third person', 
 	NoUI = false, 
 
 	Callback = empty,
@@ -564,7 +564,7 @@ stuffbox:AddLabel('open safe'):AddKeyPicker('opensafe', {
 	
 	Mode = 'Toggle', 
 
-	Text = 'Open safe', 
+	Text = 'open safe', 
 	NoUI = false, 
 
 	Callback = function(Value)
@@ -579,7 +579,7 @@ stuffbox:AddLabel('teleport to base'):AddKeyPicker('teleportbase', {
 	
 	Mode = 'Toggle', 
 
-	Text = 'Teleport to base', 
+	Text = 'teleport to base', 
 	NoUI = true,
 	
 	Callback = function(Value)
