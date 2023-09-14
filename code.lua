@@ -490,13 +490,12 @@ espbox:AddToggle('rainbowchar', {
                 do
                     local thread = task.spawn(function()
 						local rainbowresetfix = function()
-							repeat wait() until char
-							while char do
+							repeat task.wait() until char
+							while char and task.wait() do
 								hue += delta
-								 for i, v in ipairs(char:GetChildren()) do
+								 for _, v in ipairs(char:GetChildren()) do
 									if v:IsA("MeshPart") then
 										v.Color = Color3.fromHSV(hue,1,1)
-										wait()
 									end
 								end 
 								if hue >= 1 then
