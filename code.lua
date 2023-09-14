@@ -646,9 +646,9 @@ SaveManager:IgnoreThemeSettings()
 
 SaveManager:SetIgnoreIndexes({ 'MenuKeybind' })
 
-ThemeManager:SetFolder('storageware')
+ThemeManager:SetFolder('storagewareBETA')
 
-SaveManager:SetFolder('storageware/THE-STORAGE')
+SaveManager:SetFolder('storagewareBETA/THE-STORAGE')
 SaveManager:BuildConfigSection(Tabs['UI Settings'])
 
 ThemeManager:ApplyToTab(Tabs['UI Settings'])
