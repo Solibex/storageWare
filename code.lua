@@ -15,7 +15,16 @@ shared.resetfix = {}
 shared.hooked = {
 	noslidecd = nil
 }
-
+shared.client = nil
+for i,v in getgc(true) do
+    if type(v) == 'table' and rawget(v, 'SlideCD') then
+        shared.client = v
+    end
+end
+if not shared.client then
+	rconsolewarn('No client was detected!')
+	return
+end
 local storages = workspace:WaitForChild('Storages')
 local mobs = workspace:WaitForChild('Mobs')
 
@@ -127,26 +136,16 @@ stuffbox:AddToggle('noslidecd', {
 			if shared.callbacks['noslidecd'] == nil then
 				do
 					local thread = task.spawn(function()
-						shared.mathshit = time()
-						if shared.hooked.noslidecd then
-							local Old Old = hookfunction(time, function(...)
-								if Toggles.noslidecd.Value and not checkcaller() then
-									shared.mathshit += 1.76
-									return shared.mathshit
-								else
-									return Old(...)
-								end
-							end)
-							shared.hooked.noslidecd = Old
+						while task.wait() and Toggles.noslidecd.Value then
+							rawset(shared.client, 'SlideCD', -1)
 						end
 						newprint('noslidecd start')
-						shared.callbacks['noslidecd'] = function()
-							if shared.hooked.noslidecd and shared.mathshit - shared.hooked.noslidecd() >= 0 then
-								Library:Notify(('wait %.2fs until you could slide normally again'):format(mathshit - shared.hooked.noslidecd()))
-							end
-							newprint('noslidecd cancel')
-						end
 					end)
+					shared.callbacks['noslidecd'] = function()
+						task.cancel(thread)
+						rawset(shared.client, 'SlideCD', time())
+						newprint('noslidecd cancel')
+					end
 				end
 			end
 		elseif Value == false and shared.callbacks['noslidecd'] then
