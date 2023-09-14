@@ -136,7 +136,7 @@ stuffbox:AddToggle('noslidecd', {
 			if shared.callbacks['noslidecd'] == nil then
 				do
 					local thread = task.spawn(function()
-						while task.wait() and Toggles.noslidecd.Value then
+						while task.wait() and Toggles.noslidecd.Value do
 							rawset(shared.client, 'SlideCD', -1)
 						end
 						newprint('noslidecd start')
