@@ -9,11 +9,11 @@ if getgenv().debug then
 	newprint('We are running on build ALPHA')
 end
 local hue = 0
-local delta = 0.05
+local delta = 0.005
 shared.callbacks = {}
 shared.resetfix = {}
 shared.hooked = {
-	noslidecd = false
+	noslidecd = nil
 }
 
 local storages = workspace:WaitForChild('Storages')
@@ -128,22 +128,21 @@ stuffbox:AddToggle('noslidecd', {
 				do
 					local thread = task.spawn(function()
 						shared.mathshit = time()
-						if shared.hooked.noslidecd == false then
+						if shared.hooked.noslidecd then
 							local Old Old = hookfunction(time, function(...)
 								if Toggles.noslidecd.Value and not checkcaller() then
 									shared.mathshit += 1.76
-									newprint('time called!')
 									return shared.mathshit
 								else
 									return Old(...)
 								end
 							end)
-							shared.hooked.noslidecd = true
+							shared.hooked.noslidecd = Old
 						end
 						newprint('noslidecd start')
 						shared.callbacks['noslidecd'] = function()
-							if shared.mathshit - time() >= 0 then
-								Library:Notify(('wait %.2fs until you could slide normally again'):format(mathshit - time()))
+							if shared.hooked.noslidecd and shared.mathshit - shared.hooked.noslidecd() >= 0 then
+								Library:Notify(('wait %.2fs until you could slide normally again'):format(mathshit - shared.hooked.noslidecd()))
 							end
 							newprint('noslidecd cancel')
 						end
