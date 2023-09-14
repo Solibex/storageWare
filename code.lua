@@ -1,4 +1,4 @@
-getgenv().debug = false
+getgenv().debug = true
 local promptservice = game:GetService('ProximityPromptService')
 local players = game:GetService('Players')
 rconsoleclose()
@@ -56,7 +56,7 @@ local Tabs = {
 local stuffbox = Tabs.Main:AddLeftGroupbox('stuff')
 local espbox = Tabs.Main:AddRightGroupbox('esp')
 
-if not fireproximityprompt or identifyexecutor() == "Electron" then
+if not fireproximityprompt or identifyexecutor() == "Electron" then -- electron has dummy function
 	getgenv().fireproximityprompt = function(Obj)
 		if Obj.ClassName == "ProximityPrompt" then 
 			Obj:InputHoldBegin()
@@ -330,7 +330,7 @@ espbox:AddToggle('third_person', {
 			shared.callbacks['third_person'] = nil
 		end
 	end
-})stuffbox:AddLabel('third person'):AddKeyPicker('thirdperson', {
+}):AddKeyPicker('thirdperson', {
 
 	Default = 'V', 
 	SyncToggleState = true,
@@ -571,9 +571,7 @@ stuffbox:AddLabel('open safe'):AddKeyPicker('opensafe', {
 		players.LocalPlayer.PlayerGui.HUD.Bank.Visible = Value
 	end,
 
-	ChangedCallback = function(New)
-		newprint('[cb] Keybind changed!', New)
-	end
+	ChangedCallback = empty
 })
 stuffbox:AddLabel('teleport to base'):AddKeyPicker('teleportbase', {
 	Default = 'Home', 
@@ -595,9 +593,7 @@ stuffbox:AddLabel('teleport to base'):AddKeyPicker('teleportbase', {
 		Library:Notify('no base detected')
 	end,
 
-	ChangedCallback = function(New)
-		newprint('[cb] Keybind changed!', New)
-	end
+	ChangedCallback = empty
 })
 
 
