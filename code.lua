@@ -78,7 +78,7 @@ if not fireproximityprompt or identifyexecutor() == "Electron" then -- electron 
 else
 	newprint('fireproximityprompt good')
 end
-function esp(part, color, distance)
+function esp(part, color, distance, customName)
 	if part:FindFirstChild('pluh') then return end
 	local a = Instance.new("BillboardGui",part)
 	a.Name = "pluh"
@@ -98,7 +98,7 @@ function esp(part, color, distance)
 	c.TextSize = 20
 	c.Font = Enum.Font.RobotoMono
 	c.TextColor3 = color
-	c.Text = part.Name
+	c.Text = customName or part.Name
 	c.Position = UDim2.fromScale(0, -0.5)
 	c.BackgroundTransparency = 1
 end
@@ -284,6 +284,50 @@ espbox:AddToggle('npc_esp', {
 })
 espbox:AddSlider('npcesp_distance', {
 	Text = 'npc esp distance',
+	Default = 0,
+	Min = 0,
+	Max = 2000,
+	Rounding = 1,
+	Compact = false,
+})
+espbox:AddToggle('locked_esp', {
+	Text = 'locked esp',
+	Default = false, 
+	Tooltip = 'esp for locked storages', 
+
+	Callback = function(Value)
+		if Value == true then
+			if shared.callbacks['locked_esp'] == nil then
+				do
+					local shit = {}
+					local thread = task.spawn(function()
+						for _,v in ipairs(storages:GetChildren()) do
+							if v:GetAttribute('Locked') and v:FindFirstChild('Door') and v.Door:FindFirstChild('Lock') then
+								esp(v.Door.Lock,Color3.fromRGB(255, 172, 28), Options.lockedesp_distance.Value, 'Locked')
+							end
+							v:GetAttributeChangedSignal('Locked'):Connect(function()
+								if not v:GetAttribute('Locked') then return end
+								repeat wait() until v:FindFirstChild('Door') and v.Door:FindFirstChild('Lock')
+								esp(v,Color3.fromRGB(255, 172, 28), Options.lockedesp_distance.Value, 'Locked')
+								rconsoleprint('updated lock!')
+							end)
+						end
+						newprint('locked_esp start')
+					end)
+					shared.callbacks['locked_esp'] = function()
+						newprint('locked_esp cancel')
+						task.cancel(thread)
+					end
+				end
+			end
+		elseif Value == false and shared.callbacks['locked_esp'] then
+			shared.callbacks['locked_esp']()
+			shared.callbacks['locked_esp'] = nil
+		end
+	end
+})
+espbox:AddSlider('lockedesp_distance', {
+	Text = 'locked esp distance',
 	Default = 0,
 	Min = 0,
 	Max = 2000,
