@@ -625,7 +625,7 @@ stuffbox:AddLabel('teleport to base'):AddKeyPicker('teleportbase', {
 	
 	Callback = function(Value)
 		for _,v in ipairs(storages:GetChildren()) do
-			if v:GetAttribute("Owner") and v:GetAttribute("Owner") == players.LocalPlayer.Name then
+			if v:GetAttribute("Owner") == players.LocalPlayer.Name then
 				Library:Notify('Teleporting to base')
 				root:PivotTo(v:GetPivot())
 				return
