@@ -17,7 +17,7 @@ shared.hooked = {
 }
 shared.client = nil
 for i,v in getgc(true) do
-    if type(v) == 'table' and rawget(v, 'SlideCD') then
+    if type(v) == 'table' and rawget(v, 'Player') then
         shared.client = v
     end
 end
