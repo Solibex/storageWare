@@ -25,3 +25,4 @@ else
 end
 writefile('stuff/client.txt', clientDecompiled)
 writefile('stuff/utl.txt', utlDecompiled)
+writefile('stuff/effects.txt', effectsDecompiled)
