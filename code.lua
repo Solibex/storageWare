@@ -527,10 +527,14 @@ stuffbox:AddToggle('nodart', {
 local npcs_shops = {}
 for i,v in pairs(shoplib) do
 	if rawget(v, 'ToolTypes') then continue end
-
 	table.insert(npcs_shops, i)
 end
 local models = {}
+for _,v in ipairs(workspace:GetDescendants()) do
+			if v:IsA('Model') and (not table.find(models, v)) and v.PrimaryPart then
+				table.insert(models, v)
+			end
+		end
 stuffbox:AddDropdown('open_npc_shop', {
     Values = npcs_shops,
     Default = 1, -- number index of the value / string
@@ -540,12 +544,16 @@ stuffbox:AddDropdown('open_npc_shop', {
     Tooltip = 'lets you open and buy any item with no limit', -- Information shown when you hover over the dropdown
 
     Callback = function(Value)
-		for _,v in ipairs(workspace:GetDescendants()) do
-			if v:IsA('Model') and (not table.find(models, v)) then
-				table.insert(models, v)
+		rawset(_G.Utl.Channel, 'Start', empty)
+		local selected
+		local release = false
+		repeat
+			selected = models[math.random(1, #models)]	
+			if selected ~= nil then
+				release = true
 			end
-		end
-        shared.client:OpenShopGui({models[math.random(1, #models)], Value})
+		until release
+        shared.client:OpenShopGui({selected, Value})
     end
 })
 
