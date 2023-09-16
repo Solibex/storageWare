@@ -2,7 +2,6 @@ repeat wait() until game:IsLoaded()
 local replicatedStorage = game:GetService("ReplicatedStorage")
 local Client, Utl = (replicatedStorage:WaitForChild("ClientSetup")):InvokeServer()
 local localplayer = game:GetService("Players").LocalPlayer
-shared.Utl = require(Utl)
 local v59 = require(Client).new(localplayer)
 v59:SetUp()
 local clientDecompiled = decompile(Client)
