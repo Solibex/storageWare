@@ -1,5 +1,6 @@
 getgenv().debug = true
 local promptservice = game:GetService('ProximityPromptService')
+local replicatedstorage = game:GetService('ReplicatedStorage')
 local players = game:GetService('Players')
 rconsoleclose()
 function newprint(x) rconsoleprint(x..'\n') end
@@ -25,10 +26,12 @@ if not shared.client then
 	rconsolewarn('No client was detected!')
 	return
 end
+local shoplib = require(replicatedstorage.Modules.ShopLib)
+
 local storages = workspace:WaitForChild('Storages')
 local mobs = workspace:WaitForChild('Mobs')
 
-local char = players.LocalPlayer.Character
+local char = players.LocalPlayer.Character or players.LocalPlayer.CharacterAdded:Wait();
 local root = char:WaitForChild('HumanoidRootPart')
 
 players.LocalPlayer.CharacterAdded:Connect(function(character)
@@ -521,6 +524,31 @@ stuffbox:AddToggle('nodart', {
 		end
 	end
 })
+local npcs_shops = {}
+for i,v in pairs(shoplib) do
+	if rawget(v, 'ToolTypes') then continue end
+
+	table.insert(npcs_shops, i)
+end
+local models = {}
+stuffbox:AddDropdown('open_npc_shop', {
+    Values = npcs_shops,
+    Default = 1, -- number index of the value / string
+    Multi = false, -- true / false, allows multiple choices to be selected
+
+    Text = 'open npc shop',
+    Tooltip = 'lets you open and buy any item with no limit', -- Information shown when you hover over the dropdown
+
+    Callback = function(Value)
+		for _,v in ipairs(workspace:GetDescendants()) do
+			if v:IsA('Model') and (not table.find(models, v)) then
+				table.insert(models, v)
+			end
+		end
+        shared.client:OpenShopGui({models[math.random(1, #models)], Value})
+    end
+})
+
 espbox:AddToggle('rainbowchar', {
     Text = 'character rainbow',
     Default = false, -- Default value (true / false)
