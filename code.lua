@@ -544,7 +544,7 @@ stuffbox:AddDropdown('open_npc_shop', {
     Tooltip = 'lets you open and buy any item with no limit', -- Information shown when you hover over the dropdown
 
     Callback = function(Value)
-		rawset(_G.Utl.Channel, 'Start', empty)
+		rawset(_G.Utl.Channel, 'new', return "nuh uh")
 		local selected
 		local release = false
 		repeat
