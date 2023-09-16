@@ -17,13 +17,21 @@ shared.hooked = {
 	noslidecd = nil
 }
 shared.client = nil
+shared.utl = nil
 for i,v in getgc(true) do
     if type(v) == 'table' and rawget(v, 'Player') then
         shared.client = v
     end
+	if type(v) == 'table' and rawget(v, 'timeFormat') then
+		shared.utl = v
+	end
 end
 if not shared.client then
 	rconsolewarn('No client was detected!')
+	return
+end
+if not shared.utl then
+	rconsolewarn('No utl was detected!')
 	return
 end
 local shoplib = require(replicatedstorage.Modules.ShopLib)
@@ -544,7 +552,9 @@ stuffbox:AddDropdown('open_npc_shop', {
     Tooltip = 'lets you open and buy any item with no limit', -- Information shown when you hover over the dropdown
 
     Callback = function(Value)
-		rawset(_G.Utl.Channel, 'Start', empty)
+		rawset(shared.utl.Channel, 'new', function()
+			return {Duration = empty, Start = empty, Cancel = empty}
+		end)
 		local selected
 		local release = false
 		repeat
