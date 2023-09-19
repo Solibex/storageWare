@@ -550,9 +550,9 @@ stuffbox:AddDropdown('open_npc_shop', {
 
     Callback = function(Value)
 		rawset(shared.utl.Channel, 'new', function()
-			return {Duration = empty, Start = empty, Cancel = empty}
+			return {Duration = function() print('hello world!') end, Start = empty, Cancel = empty}
 		end)
-        shared.client:OpenShopGui({{PrimaryPart = root, IsA = function() return true end, FindFirstChild = function(n) if n == 'Limit' then return Instance.new('IntValue') end end}, Value})
+        shared.client:OpenShopGui({char, Value})
     end
 })
 
