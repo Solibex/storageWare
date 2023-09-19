@@ -552,15 +552,7 @@ stuffbox:AddDropdown('open_npc_shop', {
 		rawset(shared.utl.Channel, 'new', function()
 			return {Duration = empty, Start = empty, Cancel = empty}
 		end)
-		local selected
-		local release = false
-		repeat
-			selected = models[math.random(1, #models)]	
-			if selected ~= nil then
-				release = true
-			end
-		until release
-        shared.client:OpenShopGui({{PrimaryPart = root, IsA = function() return true end}, Value})
+        shared.client:OpenShopGui({{PrimaryPart = root, IsA = function() return true end, FindFirstChild = function(n) if n == 'Limit' then return Instance.new('IntValue') end end}, Value})
     end
 })
 
@@ -712,7 +704,9 @@ Library:OnUnload(function()
 		func()
 		shared.callbacks[index] = nil
 	end
-	rconsoleclose()
+	if rconsoleclose then
+		rconsoleclose()
+	end
 	newprint('Unloaded!')
 	Library.Unloaded = true
 end)
