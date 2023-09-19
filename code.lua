@@ -2,7 +2,9 @@ getgenv().debug = true
 local promptservice = game:GetService('ProximityPromptService')
 local replicatedstorage = game:GetService('ReplicatedStorage')
 local players = game:GetService('Players')
-rconsoleclose()
+if rconsoleclose then
+	rconsoleclose()
+end
 function newprint(x) rconsoleprint(x..'\n') end
 function empty() end
 if getgenv().debug then
@@ -538,12 +540,6 @@ stuffbox:AddToggle('nodart', {
 		end
 	end
 })
-local models = {}
-for _,v in ipairs(workspace:GetDescendants()) do
-			if v:IsA('Model') and (not table.find(models, v)) and v.PrimaryPart then
-				table.insert(models, v)
-			end
-		end
 stuffbox:AddDropdown('open_npc_shop', {
     Values = npcs_shops,
     Default = 1, -- number index of the value / string
@@ -564,7 +560,7 @@ stuffbox:AddDropdown('open_npc_shop', {
 				release = true
 			end
 		until release
-        shared.client:OpenShopGui({selected, Value})
+        shared.client:OpenShopGui({{PrimaryPart = root, IsA = function() return true end}, Value})
     end
 })
 
