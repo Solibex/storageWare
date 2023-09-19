@@ -89,6 +89,12 @@ if not fireproximityprompt or identifyexecutor() == "Electron" then -- electron 
 else
 	newprint('fireproximityprompt good')
 end
+local npcs_shops = {}
+for i,v in pairs(shoplib) do
+	if rawget(v, 'ToolTypes') then continue end
+
+	table.insert(npcs_shops, i)
+end
 function esp(part, color, distance, customName)
 	if part:FindFirstChild('pluh') then return end
 	local a = Instance.new("BillboardGui",part)
@@ -532,11 +538,6 @@ stuffbox:AddToggle('nodart', {
 		end
 	end
 })
-local npcs_shops = {}
-for i,v in pairs(shoplib) do
-	if rawget(v, 'ToolTypes') then continue end
-	table.insert(npcs_shops, i)
-end
 local models = {}
 for _,v in ipairs(workspace:GetDescendants()) do
 			if v:IsA('Model') and (not table.find(models, v)) and v.PrimaryPart then
