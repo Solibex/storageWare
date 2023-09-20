@@ -540,6 +540,7 @@ stuffbox:AddToggle('nodart', {
 		end
 	end
 })
+local used = {}
 stuffbox:AddDropdown('open_npc_shop', {
     Values = npcs_shops,
     Default = 1, -- number index of the value / string
@@ -549,10 +550,18 @@ stuffbox:AddDropdown('open_npc_shop', {
     Tooltip = 'lets you open and buy any item with no limit', -- Information shown when you hover over the dropdown
 
     Callback = function(Value)
+		local selected
+		for _,v in ipairs(workspace:GetDescendants()) do
+			if table.find(used, v) then continue end
+			selected = v
+			print(v.Name)
+			table.insert(used, v)
+			break
+		end
 		rawset(shared.utl.Channel, 'new', function()
 			return {Duration = empty, Start = function() Library:Notify('cancelled npc distance') end, Cancel = empty}
 		end)
-        shared.client:OpenShopGui({char, Value})
+        shared.client:OpenShopGui({root, Value})
     end
 })
 
