@@ -680,7 +680,25 @@ stuffbox:AddLabel('teleport to base'):AddKeyPicker('teleportbase', {
 
 	ChangedCallback = empty
 })
+stuffbox:AddLabel('open crafting table'):AddKeyPicker('opencrafttable', {
+	Default = 'I', 
+	SyncToggleState = false,
+	
+	Mode = 'Toggle', 
 
+	Text = 'open crafting table', 
+	NoUI = false,
+	
+	Callback = function(Value)
+		if Value == true then
+			shared.client:SetupCraft()
+		else
+			shared.client:CloseCraft()
+		end
+	end,
+
+	ChangedCallback = empty
+})
 
 Library:SetWatermarkVisibility(true)
 
