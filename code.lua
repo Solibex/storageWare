@@ -668,12 +668,17 @@ stuffbox:AddLabel('teleport to base'):AddKeyPicker('teleportbase', {
 	NoUI = true,
 	
 	Callback = function(Value)
-		for _,v in ipairs(storages:GetChildren()) do
-			if v:GetAttribute("Owner") == players.LocalPlayer.Name then
-				Library:Notify('Teleporting to base')
-				root:PivotTo(v:GetPivot())
-				return
-			end
+		-- for _,v in ipairs(storages:GetChildren()) do
+		-- 	if v:GetAttribute("Owner") == players.LocalPlayer.Name then
+		-- 		Library:Notify('Teleporting to base')
+		-- 		root:PivotTo(v:GetPivot())
+		-- 		return
+		-- 	end
+		-- end
+		if shared.StorageBase then
+			Library:Notify('Teleporting to base')
+			root:PivotTo(shared.StorageBase:GetPivot())
+			return
 		end
 		Library:Notify('no base detected')
 	end,
