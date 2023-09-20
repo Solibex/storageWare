@@ -675,9 +675,9 @@ stuffbox:AddLabel('teleport to base'):AddKeyPicker('teleportbase', {
 		-- 		return
 		-- 	end
 		-- end
-		if shared.StorageBase then
+		if shared.client.StorageBase then
 			Library:Notify('Teleporting to base')
-			root:PivotTo(shared.StorageBase:GetPivot())
+			root:PivotTo(shared.client.StorageBase:GetPivot())
 			return
 		end
 		Library:Notify('no base detected')
