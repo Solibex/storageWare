@@ -85,10 +85,12 @@ local Tabs = {
 	['UI Settings'] = Window:AddTab('UI Settings'),
 }
 
+local executor = identifyexecutor() or "shit executor"
+
 local stuffbox = Tabs.Main:AddLeftGroupbox('stuff')
 local espbox = Tabs.Main:AddRightGroupbox('esp')
 
-if not fireproximityprompt or identifyexecutor() == "Electron" then -- electron has dummy function
+if not fireproximityprompt or executor == "Electron" then -- electron has dummy function
 	getgenv().fireproximityprompt = function(Obj)
 		if Obj.ClassName == "ProximityPrompt" then 
 			Obj:InputHoldBegin()
