@@ -1,4 +1,4 @@
-getgenv().debug = true
+getgenv().debugConsole = true
 local promptservice = game:GetService('ProximityPromptService')
 local replicatedstorage = game:GetService('ReplicatedStorage')
 local players = game:GetService('Players')
@@ -8,7 +8,7 @@ if rconsoleclose then
 end
 function newprint(x) rconsoleprint(x..'\n') end
 function empty() end
-if getgenv().debug then
+if getgenv().debugConsole then
 	rconsolename('debug menu')
 	newprint('We are running on build ALPHA')
 end
