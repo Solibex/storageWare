@@ -741,7 +741,7 @@ local WatermarkConnection = game:GetService('RunService').RenderStepped:Connect(
 	end;
 
 	Library:SetWatermark(('storageware | %s | %s fps | %s ms'):format(
-		identifyexecutor(),
+		executor,
 		math.floor(FPS),
 		math.floor(game:GetService('Stats').Network.ServerStatsItem['Data Ping']:GetValue())
 	));
