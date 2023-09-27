@@ -37,6 +37,19 @@ if not shared.utl then
 	rconsolewarn('No utl was detected!')
 	return
 end
+task.spawn(function()
+	shared.client:Noti({
+    	Title = "[✅] success",
+		Text = "hooked into the client!", 
+		Duration = 1
+	})
+	wait(1)
+	shared.client:Noti({
+    	Title = "[✅] success",
+		Text = shared.utl.timeFormat(100), 
+		Duration = 1
+	})
+end)
 local shoplib = require(replicatedstorage.Modules.ShopLib)
 
 local storages = workspace:WaitForChild('Storages')
@@ -560,7 +573,13 @@ stuffbox:AddDropdown('open_npc_shop', {
 			break
 		end
 		rawset(shared.utl.Channel, 'new', function()
-			return {Duration = empty, Start = function() Library:Notify('cancelled npc distance') end, Cancel = empty}
+			return {Duration = empty, Start = function()
+				shared.client:Noti({
+					Title = "[❓] info",
+					Text = "cancelled funni dialouge", 
+					Duration = 1
+				})
+			end, Cancel = empty}
 		end)
         shared.client:OpenShopGui({root, Value})
     end
