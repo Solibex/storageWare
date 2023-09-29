@@ -9,16 +9,13 @@ end
 function newprint(x) rconsoleprint(x..'\n') end
 function empty() end
 if getgenv().debugConsole then
-	rconsolename('debug menu')
+	rconsolename('debug menu')	
 	newprint('We are running on build ALPHA')
 end
 local hue = 0
 local delta = 0.005
 shared.callbacks = {}
 shared.resetfix = {}
-shared.hooked = {
-	noslidecd = nil
-}
 shared.client = nil
 shared.utl = nil
 for i,v in getgc(true) do
@@ -90,6 +87,8 @@ local executor = identifyexecutor() or "shit executor"
 
 local stuffbox = Tabs.Main:AddLeftGroupbox('stuff')
 local espbox = Tabs.Main:AddRightGroupbox('esp')
+
+local fireprompt = (executor == 'Electron' and fireproximityprompt) and fireproximityprompt
 
 if not fireproximityprompt or executor == "Electron" then -- electron has dummy function
 	getgenv().fireproximityprompt = function(Obj)
