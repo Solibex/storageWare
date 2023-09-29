@@ -2,7 +2,6 @@ getgenv().debugConsole = true
 local promptservice = game:GetService('ProximityPromptService')
 local replicatedstorage = game:GetService('ReplicatedStorage')
 local players = game:GetService('Players')
-local cachedBase
 if rconsoleclose then
 	rconsoleclose()
 end
@@ -12,6 +11,14 @@ if getgenv().debugConsole then
 	rconsolename('debug menu')	
 	newprint('We are running on build ALPHA')
 end
+function notify(title, text, duration)
+	shared.client:Noti({
+		Title = title or "none",
+		Text = text or "none", 
+		Duration = duration or 1
+	})
+end
+
 local hue = 0
 local delta = 0.005
 shared.callbacks = {}
@@ -99,11 +106,7 @@ if not fireproximityprompt or executor == "Electron" then -- electron has dummy 
 			error("userdata<ProximityPrompt> expected")
 		end
 	end
-	shared.client:Noti({
-    	Title = "[❌] bad",
-		Text = 'fireproximityprompt is bad, requires to be looked', 
-		Duration = 1
-	})
+	notify("[❌] bad", "fireproximityprompt is bad, requires to be looked", 1)
 end
 local npcs_shops = {}
 
@@ -114,7 +117,6 @@ for i, v in pairs(shoplib) do
 
 	table.insert(npcs_shops, i)
 end
-
 function esp(part, color, distance, customName)
 	if part:FindFirstChild('pluh') then return end
 	local a = Instance.new("BillboardGui",part)
@@ -585,21 +587,13 @@ stuffbox:AddDropdown('open_npc_shop', {
 		if old then
 			rawset(shared.utl.Channel, 'new', function()
 				return {Duration = empty, Start = function()
-					shared.client:Noti({
-						Title = "[✅] success",
-						Text = "opened shop gui, reverting to old", 
-						Duration = 1
-					})
+					notify("[✅] success", "opened shop gui, reverting to old", 1)
 				end, Cancel = empty}
 			end)
 			shared.client:OpenShopGui({selected, Value})
 			rawset(shared.utl.Channel, 'new', old)
 		else
-			shared.client:Noti({
-				Title = "[❌] error",
-				Text = "failed to obtain channel.new", 
-				Duration = 1
-			})
+			notify("[❌] error", "failed to obtain channel.new", 1)
 		end
     end
 })
@@ -697,6 +691,7 @@ stuffbox:AddLabel('open safe'):AddKeyPicker('opensafe', {
 
 	ChangedCallback = empty
 })
+local cachedBase
 stuffbox:AddLabel('teleport to base'):AddKeyPicker('teleportbase', {
 	Default = 'Home', 
 	SyncToggleState = false,
@@ -708,13 +703,13 @@ stuffbox:AddLabel('teleport to base'):AddKeyPicker('teleportbase', {
 	
 	Callback = function(Value)
 		if cachedBase then
-			Library:Notify('Teleporting to base')
+			notify("[❓] info", "teleporting to base", 1)
 			root:PivotTo(cachedBase:GetPivot())
 			return
 		end
 		for _,v in ipairs(storages:GetChildren()) do
 			if v:GetAttribute("Owner") == players.LocalPlayer.Name then
-				Library:Notify('Teleporting to base')
+				notify("[✅] success", "teleported to base", 1)
 				root:PivotTo(v:GetPivot())
 				cachedBase = v
 				return
