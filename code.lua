@@ -651,8 +651,8 @@ espbox:AddToggle('forcefieldchar', {
                 do
                     local thread = task.spawn(function()
 						local forcefieldresetfix = function()
-							repeat wait() until char
-							for i, v in ipairs(char:GetChildren()) do
+							repeat task.wait() until char
+							for _, v in ipairs(char:GetChildren()) do
 								if v:IsA("BasePart") then
 									v.Material = Enum.Material.ForceField
 								end
