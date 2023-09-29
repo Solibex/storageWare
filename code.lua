@@ -44,9 +44,10 @@ task.spawn(function()
 		Duration = 1
 	})
 	wait(1)
+	local funi = os.date(tick())
 	shared.client:Noti({
     	Title = "[✅] success",
-		Text = shared.utl.timeFormat(100), 
+		Text = shared.utl.timeFormat((funi.hour * 600) + (funi.min * 60) + (funi.sec)), 
 		Duration = 1
 	})
 end)
@@ -61,8 +62,8 @@ local root = char:WaitForChild('HumanoidRootPart')
 players.LocalPlayer.CharacterAdded:Connect(function(character)
 	char = character
 	root = character:WaitForChild('HumanoidRootPart')
-	newprint('reset fix')
-	for _,func in pairs(shared.resetfix) do
+	for index,func in pairs(shared.resetfix) do
+		newprint('reset fix run | '..index)
 		func()
 	end
 end)
@@ -99,16 +100,22 @@ if not fireproximityprompt or executor == "Electron" then -- electron has dummy 
 			error("userdata<ProximityPrompt> expected")
 		end
 	end
-	Library:Notify("fireproximityprompt bad, prompt required to be looked")
-else
-	newprint('fireproximityprompt good')
+	shared.client:Noti({
+    	Title = "[❌] bad",
+		Text = 'fireproximityprompt is bad, requires to be looked', 
+		Duration = 1
+	})
 end
 local npcs_shops = {}
-for i,v in pairs(shoplib) do
-	if rawget(v, 'ToolTypes') then continue end
+
+for i, v in pairs(shoplib) do
+	if rawget(v, 'ToolTypes') then
+		continue
+	end
 
 	table.insert(npcs_shops, i)
 end
+
 function esp(part, color, distance, customName)
 	if part:FindFirstChild('pluh') then return end
 	local a = Instance.new("BillboardGui",part)
@@ -121,8 +128,6 @@ function esp(part, color, distance, customName)
 	b.BackgroundTransparency = 0.80
 	b.BorderSizePixel = 0
 	b.BackgroundColor3 = color
-	local d = Instance.new('UICorner', b)
-	d.CornerRadius = UDim.new(1, 0)
 	local c = Instance.new('TextLabel',b)
 	c.Size = UDim2.new(1,0,1,0)
 	c.BorderSizePixel = 0
@@ -132,6 +137,8 @@ function esp(part, color, distance, customName)
 	c.Text = customName or part.Name
 	c.Position = UDim2.fromScale(0, -0.5)
 	c.BackgroundTransparency = 1
+	local d = Instance.new('UICorner', b)
+	d.CornerRadius = UDim.new(1, 0)
 end
 stuffbox:AddToggle('instant_prompt', {
 	Text = 'instant prompt',
@@ -146,8 +153,13 @@ stuffbox:AddToggle('instant_prompt', {
 						local connection = promptservice.PromptButtonHoldBegan:Connect(function(prompt)
 							prompt.HoldDuration = 0
 						end)
+
 						newprint('instant_prompt start')
-						shared.callbacks['instant_prompt'] = function() connection:Disconnect() newprint('instant_prompt cancel') end
+
+						shared.callbacks['instant_prompt'] = function()
+							connection:Disconnect() 
+							newprint('instant_prompt cancel') 
+						end
 					end)
 				end
 			end
@@ -340,7 +352,7 @@ espbox:AddToggle('locked_esp', {
 								if not v:GetAttribute('Locked') then return end
 								repeat wait() until v:FindFirstChild('Door') and v.Door:FindFirstChild('Lock')
 								esp(v,Color3.fromRGB(255, 172, 28), Options.lockedesp_distance.Value, 'Locked')
-								rconsoleprint('updated lock!')
+								newprint('updated lock')
 							end)
 						end
 						newprint('locked_esp start')
