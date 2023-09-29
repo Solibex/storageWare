@@ -582,16 +582,26 @@ stuffbox:AddDropdown('open_npc_shop', {
 			table.insert(used, v)
 			break
 		end
-		rawset(shared.utl.Channel, 'new', function()
-			return {Duration = empty, Start = function()
-				shared.client:Noti({
-					Title = "[❓] info",
-					Text = "cancelled funni dialouge", 
-					Duration = 1
-				})
-			end, Cancel = empty}
-		end)
-        shared.client:OpenShopGui({root, Value})
+		local old = rawget(shared.utl.Channel, 'new')
+		if old then
+			rawset(shared.utl.Channel, 'new', function()
+				return {Duration = empty, Start = function()
+					shared.client:Noti({
+						Title = "[✅] success",
+						Text = "opened shop gui, reverting to old", 
+						Duration = 1
+					})
+				end, Cancel = empty}
+			end)
+			shared.client:OpenShopGui({selected, Value})
+			rawset(shared.utl.Channel, 'new', old)
+		else
+			shared.client:Noti({
+				Title = "[❌] error",
+				Text = "failed to obtain channel.new", 
+				Duration = 1
+			})
+		end
     end
 })
 
