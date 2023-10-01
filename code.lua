@@ -33,27 +33,11 @@ for i,v in getgc(true) do
 		shared.utl = v
 	end
 end
-if not shared.client then
-	rconsolewarn('No client was detected!')
-	return
-end
-if not shared.utl then
-	rconsolewarn('No utl was detected!')
-	return
-end
+assert(shared.client, 'no client was detected')
+assert(shared.utl, 'no utilities was detected')
+
 task.spawn(function()
-	shared.client:Noti({
-    	Title = "[✅] success",
-		Text = "hooked into the client!", 
-		Duration = 1
-	})
-	wait(1)
-	local funi = os.date(tick())
-	shared.client:Noti({
-    	Title = "[✅] success",
-		Text = shared.utl.timeFormat((funi.hour * 600) + (funi.min * 60) + (funi.sec)), 
-		Duration = 1
-	})
+	notify("[✅] success", "hooked into the client, and utilities!", 1)
 end)
 local shoplib = require(replicatedstorage.Modules.ShopLib)
 
@@ -95,17 +79,16 @@ local executor = identifyexecutor() or "shit executor"
 local stuffbox = Tabs.Main:AddLeftGroupbox('stuff')
 local espbox = Tabs.Main:AddRightGroupbox('esp')
 
-local fireprompt = (executor == 'Electron' and fireproximityprompt) and fireproximityprompt
+local fireprompt = (executor == 'Electron' and function(Obj)
+	if Obj.ClassName == "ProximityPrompt" then 
+		Obj:InputHoldBegin()
+		Obj:InputHoldEnd()
+	else 
+		error("userdata<ProximityPrompt> expected")
+	end
+end) and fireproximityprompt
 
 if not fireproximityprompt or executor == "Electron" then -- electron has dummy function
-	getgenv().fireproximityprompt = function(Obj)
-		if Obj.ClassName == "ProximityPrompt" then 
-			Obj:InputHoldBegin()
-			Obj:InputHoldEnd()
-		else 
-			error("userdata<ProximityPrompt> expected")
-		end
-	end
 	notify("[❌] bad", "fireproximityprompt is bad, requires to be looked", 1)
 end
 local npcs_shops = {}
@@ -351,7 +334,7 @@ espbox:AddToggle('locked_esp', {
 							end
 							v:GetAttributeChangedSignal('Locked'):Connect(function()
 								if not v:GetAttribute('Locked') then return end
-								repeat wait() until v:FindFirstChild('Door') and v.Door:FindFirstChild('Lock')
+								repeat task.wait() until v:FindFirstChild('Door') and v.Door:FindFirstChild('Lock')
 								esp(v,Color3.fromRGB(255, 172, 28), Options.lockedesp_distance.Value, 'Locked')
 								newprint('updated lock')
 							end)
@@ -465,7 +448,7 @@ stuffbox:AddToggle('autopickup', {
 								end
 								local prompt = v:FindFirstChild('ProximityPrompt', true) or v:FindFirstChild('Prompt', true)
 								if prompt then
-									fireproximityprompt(prompt)
+									fireprompt(prompt)
 								end
 							end
 						end
