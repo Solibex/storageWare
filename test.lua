@@ -1,5 +1,7 @@
 repeat wait() until game:IsLoaded()
-local timeFormat
+local timeFormat = function(value)
+	return '[ timeformat fail ] - '..value
+end
 local players = game:GetService("Players")
 local hud = players.LocalPlayer:WaitForChild('PlayerGui'):WaitForChild('HUD')
 local clockGui = hud:WaitForChild('Clock')
