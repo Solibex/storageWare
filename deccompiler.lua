@@ -17,7 +17,7 @@ if isfile('stuff/utl.txt') and readfile('stuff/utl.txt') == utlDecompiled then
 else
     warn('new update! | Utl')
 end
-if isfile('stuff/effects.txt') and readfile('stuff/effects.txt') == utlDecompiled then
+if isfile('stuff/effects.txt') and readfile('stuff/effects.txt') == effectsDecompiled then
     warn('no new update | Effects')
 else
     warn('new update! | Effects')
