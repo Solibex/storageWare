@@ -1,9 +1,6 @@
 repeat wait() until game:IsLoaded()
 local replicatedStorage = game:GetService("ReplicatedStorage")
 local Client, Utl = (replicatedStorage:WaitForChild("ClientSetup")):InvokeServer()
-local localplayer = game:GetService("Players").LocalPlayer
-local v59 = require(Client).new(localplayer)
-v59:SetUp()
 local clientDecompiled = decompile(Client)
 local utlDecompiled = decompile(Utl)
 local effectsDecompiled = decompile(Utl:WaitForChild('Effects'))
