@@ -79,14 +79,14 @@ local executor = identifyexecutor() or "shit executor"
 local stuffbox = Tabs.Main:AddLeftGroupbox('stuff')
 local espbox = Tabs.Main:AddRightGroupbox('esp')
 
-local fireprompt = (executor == 'Electron' and function(Obj)
+local fireprompt = fireproximityprompt or function(Obj)
 	if Obj.ClassName == "ProximityPrompt" then 
 		Obj:InputHoldBegin()
 		Obj:InputHoldEnd()
 	else 
 		error("userdata<ProximityPrompt> expected")
 	end
-end) and fireproximityprompt
+end
 
 if not fireproximityprompt or executor == "Electron" then -- electron has dummy function
 	notify("[❌] bad", "fireproximityprompt is bad, requires to be looked", 1)
@@ -431,7 +431,6 @@ stuffbox:AddToggle('autopickup', {
 								if (part.Parent.Name == 'Loot') or (part.Parent.Name == 'Items') or (part.Name == "Golden Skull") then
 									table.insert(cum, part)
 									part:SetAttribute('autopickup_registered', true)
-									newprint(part.Name..' '..part.Parent.Name..' registered value-'..tostring(part:GetAttribute('autopickup_registered')))
 								end
 							end))
 
@@ -443,13 +442,11 @@ stuffbox:AddToggle('autopickup', {
 						end
 						while task.wait() do
 							for _,v in ipairs(cum) do
-								if (root.Position - v:GetPivot().Position).Magnitude >= 20 then
+								local prompt = v:FindFirstChild('ProximityPrompt', true) or v:FindFirstChild('Prompt', true)
+								if (not prompt) or (root.Position - v:GetPivot().Position).Magnitude >= 25 then
 									continue
 								end
-								local prompt = v:FindFirstChild('ProximityPrompt', true) or v:FindFirstChild('Prompt', true)
-								if prompt then
-									fireprompt(prompt)
-								end
+								fireprompt(prompt)
 							end
 						end
 					end)
@@ -555,7 +552,7 @@ stuffbox:AddDropdown('open_npc_shop', {
     Multi = false, -- true / false, allows multiple choices to be selected
 
     Text = 'open npc shop',
-    Tooltip = 'lets you open and buy any item with no limit', -- Information shown when you hover over the dropdown
+    Tooltip = 'lets you open and buy any item', -- Information shown when you hover over the dropdown
 
     Callback = function(Value)
 		local selected
