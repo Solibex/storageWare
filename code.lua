@@ -559,7 +559,6 @@ stuffbox:AddDropdown('open_npc_shop', {
 		for _,v in ipairs(workspace:GetDescendants()) do
 			if table.find(used, v) then continue end
 			selected = v
-			print(v.Name)
 			table.insert(used, v)
 			break
 		end
@@ -567,7 +566,7 @@ stuffbox:AddDropdown('open_npc_shop', {
 		if old then
 			rawset(shared.utl.Channel, 'new', function()
 				return {Duration = empty, Start = function()
-					notify("[✅] success", "opened shop gui, reverting to old", 1)
+					notify("[✅] success", "opened shop gui", 1)
 				end, Cancel = empty}
 			end)
 			shared.client:OpenShopGui({selected, Value})
