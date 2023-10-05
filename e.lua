@@ -39,15 +39,11 @@ local function handleAction(actionName, inputState, _inputObject)
 				text.Text = 'force stopped' 
 				break 
 			end
-			if currentCollector == false or (not currentCollector.Parent:FindFirstChild(currentCollector.Name)) then
-				text.Text = 'no collector!'
-				break
-			end
 			local args = {
 				[1] = "BuyItem",
 				[2] = {
-					[1] = item,
-					[2] = npc,
+					[1] = getgenv.item,
+					[2] = getgenv.npc,
 					[3] = v
 				}
 			}
