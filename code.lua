@@ -25,7 +25,7 @@ shared.callbacks = {}
 shared.resetfix = {}
 shared.client = nil
 shared.utl = nil
-for i,v in getgc(true) do
+for _,v in getgc(true) do
     if type(v) == 'table' and rawget(v, 'Player') then
         shared.client = v
     end

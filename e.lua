@@ -42,8 +42,8 @@ local function handleAction(actionName, inputState, _inputObject)
 			local args = {
 				[1] = "BuyItem",
 				[2] = {
-					[1] = getgenv.item,
-					[2] = getgenv.npc,
+					[1] = getgenv().item,
+					[2] = getgenv().npc,
 					[3] = v
 				}
 			}
