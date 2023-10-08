@@ -1,16 +1,14 @@
-getgenv().debugConsole = true
 local promptservice = game:GetService('ProximityPromptService')
 local replicatedstorage = game:GetService('ReplicatedStorage')
 local players = game:GetService('Players')
-if rconsoleclose then
-	rconsoleclose()
-end
+
 function newprint(x) rconsoleprint(x..'\n') end
 function empty() end
 if getgenv().debugConsole then
 	rconsolename('debug menu')	
 	newprint('We are running on build ALPHA')
 end
+
 function notify(title, text, duration)
 	shared.client:Noti({
 		Title = title or "none",
@@ -18,9 +16,6 @@ function notify(title, text, duration)
 		Duration = duration or 1
 	})
 end
-
-local hue = 0
-local delta = 0.005
 shared.callbacks = {}
 shared.resetfix = {}
 shared.client = nil
@@ -39,15 +34,19 @@ assert(shared.utl, 'no utilities was detected')
 task.spawn(function()
 	notify("[✅] success", "hooked into the client, and utilities!", 1)
 end)
-local shoplib = require(replicatedstorage.Modules.ShopLib)
+local modules = replicatedstorage:WaitForChild('Modules')
+
+local shoplib = require(modules:WaitForChild('ShopLib'))
 
 local storages = workspace:WaitForChild('Storages')
 local mobs = workspace:WaitForChild('Mobs')
 
-local char = players.LocalPlayer.Character or players.LocalPlayer.CharacterAdded:Wait();
+local localplr = players.LocalPlayer
+
+local char = localplr.Character or localplr.CharacterAdded:Wait();
 local root = char:WaitForChild('HumanoidRootPart')
 
-players.LocalPlayer.CharacterAdded:Connect(function(character)
+localplr.CharacterAdded:Connect(function(character)
 	char = character
 	root = character:WaitForChild('HumanoidRootPart')
 	for index,func in pairs(shared.resetfix) do
@@ -94,7 +93,7 @@ end
 local npcs_shops = {}
 
 for i, v in pairs(shoplib) do
-	if rawget(v, 'ToolTypes') then
+	if rawget(v, 'ToolTypes') then -- sellers
 		continue
 	end
 
@@ -332,12 +331,6 @@ espbox:AddToggle('locked_esp', {
 							if v:GetAttribute('Locked') and v:FindFirstChild('Door') and v.Door:FindFirstChild('Lock') then
 								esp(v.Door.Lock,Color3.fromRGB(255, 172, 28), Options.lockedesp_distance.Value, 'Locked')
 							end
-							v:GetAttributeChangedSignal('Locked'):Connect(function()
-								if not v:GetAttribute('Locked') then return end
-								repeat task.wait() until v:FindFirstChild('Door') and v.Door:FindFirstChild('Lock')
-								esp(v,Color3.fromRGB(255, 172, 28), Options.lockedesp_distance.Value, 'Locked')
-								newprint('updated lock')
-							end)
 						end
 						newprint('locked_esp start')
 					end)
@@ -375,9 +368,9 @@ espbox:AddToggle('third_person', {
 						for _=1, 2 do
 							local loop = task.spawn(function()
 								while task.wait() do
-									players.LocalPlayer.CameraMode = Enum.CameraMode.Classic
-									players.LocalPlayer.CameraMinZoomDistance = 20
-									players.LocalPlayer.CameraMaxZoomDistance = 20
+									localplr.CameraMode = Enum.CameraMode.Classic
+									localplr.CameraMinZoomDistance = 20
+									localplr.CameraMaxZoomDistance = 20
 								end
 							end)
 							table.insert(shit, loop)
@@ -577,6 +570,8 @@ stuffbox:AddDropdown('open_npc_shop', {
     end
 })
 
+local hue = 0
+local delta = 0.005
 espbox:AddToggle('rainbowchar', {
     Text = 'character rainbow',
     Default = false, -- Default value (true / false)
@@ -665,7 +660,7 @@ stuffbox:AddLabel('open safe'):AddKeyPicker('opensafe', {
 	NoUI = false, 
 
 	Callback = function(Value)
-		players.LocalPlayer.PlayerGui.HUD.Bank.Visible = Value
+		localplr.PlayerGui.HUD.Bank.Visible = Value
 	end,
 
 	ChangedCallback = empty
@@ -681,17 +676,19 @@ stuffbox:AddLabel('teleport to base'):AddKeyPicker('teleportbase', {
 	NoUI = true,
 	
 	Callback = function(Value)
+		notify("[❓] info", "attempting to teleporting to base", 1)
 		if cachedBase then
-			notify("[❓] info", "teleporting to base", 1)
 			root:PivotTo(cachedBase:GetPivot())
+			notify("[✅] success", "teleported to base", 1)
 			return
-		end
-		for _,v in ipairs(storages:GetChildren()) do
-			if v:GetAttribute("Owner") == players.LocalPlayer.Name then
-				notify("[✅] success", "teleported to base", 1)
-				root:PivotTo(v:GetPivot())
-				cachedBase = v
-				return
+		else
+			for _,v in ipairs(storages:GetChildren()) do
+				if v:GetAttribute("Owner") == localplr.Name then
+					root:PivotTo(v:GetPivot())
+					cachedBase = v
+					notify("[✅] success", "teleported to base", 1)
+					return
+				end
 			end
 		end
 		Library:Notify('no base detected')
@@ -718,7 +715,6 @@ stuffbox:AddLabel('open crafting table'):AddKeyPicker('opencrafttable', {
 
 	ChangedCallback = empty
 })
-
 Library:SetWatermarkVisibility(true)
 
 
