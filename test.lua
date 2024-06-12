@@ -1,4 +1,4 @@
-repeat wait() until game:IsLoaded()
+repeat task.wait() until game:IsLoaded()
 local timeFormat = function(value)
 	return '[ timeformat fail ] - '..value
 end
