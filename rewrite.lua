@@ -1,7 +1,7 @@
 local texts = {
     -- stuff
-    instant_prompt = {Text = 'instant prompt', Tooltip = ''};
-    no_slide_cd = {Text = 'no slide cooldown', Tooltip = ''};
+    instant_prompt = {Text = 'instant prompt', Tooltip = 'instantly pick up items, etc..'};
+    no_slide_cd = {Text = 'no slide cooldown', Tooltip = 'remove slide cooldown'};
 
     -- esp
     item_esp = {Text = 'item esp', Tooltip = ''};
@@ -106,17 +106,17 @@ local stuff_box = tabs.main:AddLeftGroupbox('stuff')
 local esp_box = tabs.main:AddRightGroupbox('esp')
 
 stuff_box:AddToggle('instant_prompt', {
-	Text = texts.instant_prompt,
+	Text = texts.instant_prompt.Text,
 	Default = false, 
-	Tooltip = 'instantly pick up items, etc..', 
+	Tooltip = texts.instant_prompt.Tooltip, 
 
 	Callback = function() end
 })
 
 stuff_box:AddToggle('no_slide_cd', {
-	Text = texts.no_slide_cd,
+	Text = texts.no_slide_cd.Text,
 	Default = false, 
-	Tooltip = 'remove slide cooldown', 
+	Tooltip = texts.no_slide_cd.Tooltip, 
 
 	Callback = function() end
 })
