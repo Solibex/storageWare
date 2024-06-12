@@ -4,9 +4,10 @@ local timeFormat = function(value)
 end
 local players = game:GetService("Players")
 local hud = players.LocalPlayer:WaitForChild('PlayerGui'):WaitForChild('HUD')
-local clockGui = hud:WaitForChild('Clock')
-clockGui.Visible = true
-local clockTime = workspace:WaitForChild('ClockTime')
+local clock_gui = hud:WaitForChild('Clock')
+clock_gui.Visible = true
+
+local clock_time = workspace:WaitForChild('ClockTime')
 
 for i,v in getgc(false) do
 	if type(v) == 'function' and getfenv(v).script.Name == 'Utilities' and debug.getinfo(v).name == 'timeFormat' then
@@ -14,6 +15,6 @@ for i,v in getgc(false) do
 	end
 end
 
-clockTime.Changed:Connect(function(value)
-	clockGui.Text = timeFormat(value)
+clock_time.Changed:Connect(function(value)
+	clock_gui.Text = timeFormat(value)
 end)
