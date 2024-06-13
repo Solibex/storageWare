@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-global
 local promptservice = game:GetService('ProximityPromptService')
 local replicatedstorage = game:GetService('ReplicatedStorage')
 local players = game:GetService('Players')
