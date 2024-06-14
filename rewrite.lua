@@ -4,8 +4,11 @@ local texts = {
     no_slide_cd = {Text = 'no slide cooldown', Tooltip = 'remove slide cooldown'};
 
     -- esp
+    player_esp = {Text = 'player esp', Tooltip = 'esp for player'};
     item_esp = {Text = 'item esp', Tooltip = 'esp for item'};
+    npc_esp = {Text = 'npc esp', Tooltip = 'esp for npc'};
     mob_esp = {Text = 'mob esp', Tooltip = 'esp for mobs'};
+    storage_esp = {Text = 'storage esp', Tooltip = 'esp for storage'}
 }
 
 local CHECK_MARK = '✅'
@@ -23,11 +26,21 @@ local shop_lib = require(modules:WaitForChild('ShopLib'))
 
 local local_player = players.LocalPlayer
 
+local character = local_player.CharacterAdded:Wait();
+
 local storages = workspace:WaitForChild('Storages')
 local mobs = workspace:WaitForChild('Mobs')
 
 local client_table, ult_table
+
 local connections_table = {}
+local objects_table = {
+    item_esp = {};
+    npc_esp = {};
+    mob_esp = {};
+    storage_esp = {};
+}
+
 local npc_shops = {}
 
 local executor = (identifyexecutor and identifyexecutor()) or "shit executor"
@@ -120,6 +133,7 @@ local esp_box = tabs.main:AddRightGroupbox('esp')
 
 local player_tab = esp_box:AddTab('player')
 local item_tab = esp_box:AddTab('item')
+local npc_tab = esp_box:AddTab('npc')
 local mob_tab = esp_box:AddTab('mob')
 local storage_tab = esp_box:AddTab('storage')
 
@@ -139,7 +153,43 @@ stuff_box:AddToggle('no_slide_cd', {
 	Callback = function() end
 })
 
-esp_box:AddToggle('emen')
+player_tab:AddToggle('player_esp', {
+    Text = texts.player_esp.Text,
+    Default = false,
+    Tooltip = texts.player_esp.Tooltip,
+    Callback = function(value)
+        Sense.teamSetting.enemy.enabled = value
+    end
+})
+
+item_tab:AddToggle('item_esp', {
+    Text = texts.item_esp.Text,
+    Default = false,
+    Tooltip = texts.item_esp.Tooltip,
+    Callback = function() end
+})
+
+npc_tab:AddToggle('npc_esp', {
+    Text = texts.item_esp.Text,
+    Default = false,
+    Tooltip = texts.item_esp.Tooltip,
+    Callback = function() end
+})
+
+mob_tab:AddToggle('mob_esp', {
+    Text = texts.mob_esp.Text,
+    Default = false,
+    Tooltip = texts.mob_esp.Tooltip,
+    Callback = function() end
+})
+
+storage_tab:AddToggle('storage_esp', {
+    Text = texts.mob_esp.Text,
+    Default = false,
+    Tooltip = texts.mob_esp.Tooltip,
+    Callback = function() end
+})
+
 
 local ui_box = tabs.ui_settings:AddLeftGroupbox('ui')
 
@@ -172,14 +222,39 @@ end))
 table.insert(connections_table, run_service.RenderStepped:Connect(function(delta)
     if Toggles.no_slide_cd.Value and client_table then
         -- metatable is an option but some exploits doesnt support it
+        -- and this works just fine 🤷
         rawset(client_table, 'SlideCD', -1)
     end
+
+    if Toggles.mob_esp.Value then
+        for _, object in objects_table.mob_esp do
+            object.options.enabled = true
+        end
+    end
 end))
+
+table.insert(connections_table, mobs.ChildAdded:Connect(function(child)
+    local mob_object = Sense.AddInstance(child, {
+        enabled = false,
+        text = "{name}", -- Placeholders: {name}, {distance}, {position}
+        textColor = { Color3.new(1,1,1), 1 },
+        textOutline = true,
+        textOutlineColor = Color3.new(),
+        textSize = 13,
+        textFont = 2,
+        limitDistance = false,
+        maxDistance = 150
+    })
+
+    table.insert(objects_table.mob_esp, mob_object)
+end))
+
 
 Library:OnUnload(function()
     for _, connection in connections_table do
         connection:Disconnect()
     end
+    Sense.Unload()
     print('Unloaded!')
     Library.Unloaded = true
 end)
