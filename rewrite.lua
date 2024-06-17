@@ -165,9 +165,7 @@ player_tab:AddToggle('player_esp', {
     Text = texts.player_esp.Text,
     Default = false,
     Tooltip = texts.player_esp.Tooltip,
-    Callback = function(value)
-        Sense.teamSetting.enemy.enabled = value
-    end
+    Callback = function() end
 })
 
 item_tab:AddToggle('item_esp', {
@@ -255,9 +253,7 @@ Library:OnUnload(function()
     for _, connection in connections_table do
         connection:Disconnect()
     end
-    Sense.Unload()
+    esp_library:Unload()
     print('Unloaded!')
     Library.Unloaded = true
 end)
-
-Sense.Load()

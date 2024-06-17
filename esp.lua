@@ -1,6 +1,6 @@
 local run_service = cloneref(game:GetService('RunService')) :: RunService
 
-local esp_module = {}
+local esp_module = {functions = {}}
 
 local camera = workspace.CurrentCamera
 
@@ -47,8 +47,16 @@ function esp_module:AddInstance(object, data)
 
     table.insert(connections, run_service.RenderStepped:Connect(update))
     table.insert(connections, object.Destroying:Connect(die)) 
+    table.insert(esp_module.functions, die)
 
     return text
+end
+
+function esp_module:Unload()
+    for _, func in esp_module.functions do
+        func()
+    end
+    esp_module = nil
 end
 
 return esp_module
