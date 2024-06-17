@@ -1,4 +1,3 @@
-local http_service = cloneref(game:GetService('HttpService')) :: HttpService
 local run_service = cloneref(game:GetService('RunService')) :: RunService
 
 local esp_module = {}
