@@ -1,4 +1,4 @@
-local core_gui = cloneref(game:GetService('CoreGui')) :: CoreGui
+local http_service = cloneref(game:GetService('HttpService')) :: HttpService
 local run_service = cloneref(game:GetService('RunService')) :: RunService
 
 local esp_module = {}
@@ -12,6 +12,7 @@ function esp_module:AddInstance(object, data)
     text.Size = 12
     text.Outline = true
     text.Font = 2
+    text.Enabled = false
 
     for index, value in data or {} do
         text[index] = value
@@ -36,7 +37,7 @@ function esp_module:AddInstance(object, data)
 
         local vec3, onscreen = camera:WorldToViewportPoint(object:GetPivot().Position)
         if onscreen then
-            text.Visible = true
+            text.Visible = (text.Enabled == false and false) or true
             text.Position = Vector2.new(vec3.X, vec3.Y)
         else
             text.Visible = false
@@ -44,10 +45,10 @@ function esp_module:AddInstance(object, data)
     end
 
     local connections = {}
-    
+
     table.insert(connections, run_service.RenderStepped:Connect(update))
     table.insert(connections, object.Destroying:Connect(die)) 
-    
+
     return text
 end
 
