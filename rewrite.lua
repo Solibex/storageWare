@@ -236,13 +236,14 @@ table.insert(connections_table, run_service.RenderStepped:Connect(function(delta
 
     if Toggles.mob_esp.Value then
         for _, object in objects_table.mob_esp do
-            object.options.enabled = true
+            object.enabled = true
         end
     end
 end))
 
 table.insert(connections_table, mobs.ChildAdded:Connect(function(child)
     local mob_object = esp_library:AddInstance(child, {
+        Enabled = Toggles.mob_esp.Value,
         Text = child.Name, -- Placeholders: {name}, {distance}, {position
     })
 
