@@ -64,7 +64,7 @@ end
 
 local repo = 'https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/'
 
-local Sense = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Sirius/request/library/sense/source.lua'))()
+local esp_library = loadstring(game:HttpGet('https://raw.githubusercontent.com/Solibex/storageWare/main/esp.lua'))()
 local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
 local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
 local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
@@ -242,16 +242,8 @@ table.insert(connections_table, run_service.RenderStepped:Connect(function(delta
 end))
 
 table.insert(connections_table, mobs.ChildAdded:Connect(function(child)
-    local mob_object = Sense.AddInstance(child, {
-        enabled = false,
-        text = "{name}", -- Placeholders: {name}, {distance}, {position}
-        textColor = { Color3.new(1,1,1), 1 },
-        textOutline = true,
-        textOutlineColor = Color3.new(),
-        textSize = 13,
-        textFont = 2,
-        limitDistance = false,
-        maxDistance = 150
+    local mob_object = esp_library:AddInstance(child, {
+        Text = child.Name, -- Placeholders: {name}, {distance}, {position
     })
 
     table.insert(objects_table.mob_esp, mob_object)

@@ -5,9 +5,6 @@ local esp_module = {}
 
 local camera = workspace.CurrentCamera
 
-local container = Instance.new('Folder')
-container.Parent = (gethui and gethui()) or core_gui
-
 function esp_module:AddInstance(object, data)
     local text = Drawing.new('Text')
 
@@ -47,8 +44,11 @@ function esp_module:AddInstance(object, data)
     end
 
     local connections = {}
+    
     table.insert(connections, run_service.RenderStepped:Connect(update))
-    table.insert(connections, object.Destroying:Connect(die))
+    table.insert(connections, object.Destroying:Connect(die)) 
+    
+    return text
 end
 
 return esp_module
