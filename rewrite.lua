@@ -1,3 +1,11 @@
+-- solara being retarded
+if not getgenv()['Toggles'] then
+    getgenv().Toggles = {}
+end
+if not getgenv()['Options'] then
+    getgenv().Options = {}
+end
+
 local texts = {
     -- stuff
     instant_prompt = {Text = 'instant prompt', Tooltip = 'instantly pick up items, etc..'};

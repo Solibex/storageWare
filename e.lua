@@ -64,7 +64,7 @@ local function handleAction(actionName, inputState, _inputObject)
 		while currentCollector == false and task.wait() do
 			for _, v in pairs(storages:GetDescendants()) do
 				if v.Name == 'The Collector' then
-					v:PivotTo(v:GetPivot() * CFrame.new(0, 2, 0))
+					character:PivotTo(v:GetPivot() * CFrame.new(0, 2, 0))
 					text.Text = 'found him!'
 					currentCollector = v
 					getgenv().searchingCollector = false
