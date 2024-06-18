@@ -11,7 +11,7 @@ function esp_module:AddInstance(object, data)
     text.Size = 12
     text.Outline = true
     text.Font = 2
-    text.Enabled = false
+    text.enabled = false
 
     for index, value in data or {} do
         text[index] = value
@@ -23,6 +23,7 @@ function esp_module:AddInstance(object, data)
         if text then
             text:Remove()
         end
+
         for _, connection in connections do
             connection:Disconnect()
         end
@@ -36,7 +37,7 @@ function esp_module:AddInstance(object, data)
 
         local vec3, onscreen = camera:WorldToViewportPoint(object:GetPivot().Position)
         if onscreen then
-            text.Visible = (text.Enabled == false and false) or true
+            text.Visible = (text.enabled == false and false) or true
             text.Position = Vector2.new(vec3.X, vec3.Y)
         else
             text.Visible = false

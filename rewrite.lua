@@ -43,6 +43,7 @@ local client_table, ult_table
 
 local connections_table = {}
 local objects_table = {
+    player_esp = {};
     item_esp = {};
     npc_esp = {};
     mob_esp = {};
@@ -237,17 +238,32 @@ table.insert(connections_table, run_service.RenderStepped:Connect(function(delta
             object.enabled = true
         end
     end
+    if Toggles.player_esp.Value then
+        for _, object in objects_table.player_esp do
+            object.enabled = true
+        end
+    end
 end))
 
 table.insert(connections_table, mobs.ChildAdded:Connect(function(child)
     local mob_object = esp_library:AddInstance(child, {
-        Enabled = Toggles.mob_esp.Value,
-        Text = child.Name, -- Placeholders: {name}, {distance}, {position
+        enabled = Toggles.mob_esp.Value,
+        Text = child.Name,
     })
 
     table.insert(objects_table.mob_esp, mob_object)
 end))
 
+table.insert(connections_table, players.PlayerAdded:Connect(function(player)
+    local character = player.Character or player.CharacterAdded:Wait()
+
+    local player_object = esp_library:AddInstance(character, {
+        enabled = Toggles.player_esp.Value,
+        Text = player.Name,
+    })
+
+    table.insert(objects_table.player_esp, player_object)
+end))
 
 Library:OnUnload(function()
     for _, connection in connections_table do
