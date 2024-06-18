@@ -43,8 +43,6 @@ function esp_module:AddInstance(object, data)
         end
     end
 
-    local connections = {}
-
     table.insert(connections, run_service.RenderStepped:Connect(update))
     table.insert(connections, object.Destroying:Connect(die)) 
     table.insert(esp_module.functions, die)
