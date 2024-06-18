@@ -21,7 +21,7 @@ function esp_module:AddInstance(object, data)
 
     local function die()
         if text then
-            text:Remove()
+            text.Remove()
         end
 
         for _, connection in connections do
@@ -55,7 +55,6 @@ function esp_module:Unload()
     for _, func in esp_module.functions do
         func()
     end
-    esp_module = nil
 end
 
 return esp_module

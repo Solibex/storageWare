@@ -30,11 +30,11 @@ local proximity_prompt_service = cloneref(game:GetService('ProximityPromptServic
 
 local modules = replicated_storage:WaitForChild('Modules')
 
-local shop_lib = require(modules:WaitForChild('ShopLib'))
+local shop_lib = require(modules:WaitForChild('ShopLib')) or {}
 
 local local_player = players.LocalPlayer
 
-local character = local_player.CharacterAdded:Wait();
+local character = local_player.Character or local_player.CharacterAdded:Wait();
 
 local storages = workspace:WaitForChild('Storages')
 local mobs = workspace:WaitForChild('Mobs')
@@ -65,7 +65,7 @@ end
 
 local repo = 'https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/'
 
-local esp_library = loadstring(game:HttpGet('https://raw.githubusercontent.com/Solibex/storageWare/main/esp.lua'))()
+local esp_library = loadstring(game:HttpGet('https://raw.githubusercontent.com/Solibex/storageWare/main/esp.lua?token=GHSAT0AAAAAACQC3JTTJOG7JPUTZ74BD5YAZTROCYA'))()
 local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
 local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
 local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
@@ -132,19 +132,19 @@ local window = Library:CreateWindow({
 Library:SetWatermark('storage ware rewrite')
 
 local tabs = {
-	main = window:AddTab('Main');
+	main = window:AddTab('main');
+    esp = window:AddTab('esp');
 	ui_settings = window:AddTab('UI Settings');
 }
 
 
 local stuff_box = tabs.main:AddLeftGroupbox('stuff')
-local esp_box = tabs.main:AddRightGroupbox('esp')
 
-local player_tab = esp_box:AddTab('player')
-local item_tab = esp_box:AddTab('item')
-local npc_tab = esp_box:AddTab('npc')
-local mob_tab = esp_box:AddTab('mob')
-local storage_tab = esp_box:AddTab('storage')
+local player_tab = tabs.esp:AddLeftGroupbox('player esp')
+local item_tab = tabs.esp:AddRightGroupbox('item')
+local npc_tab = tabs.esp:AddLeftGroupbox('npc')
+local mob_tab = tabs.esp:AddRightGroupbox('mob')
+local storage_tab = tabs.esp:AddLeftGroupbox('storage')
 
 stuff_box:AddToggle('instant_prompt', {
 	Text = texts.instant_prompt.Text,
@@ -233,15 +233,11 @@ table.insert(connections_table, run_service.RenderStepped:Connect(function(delta
         rawset(client_table, 'SlideCD', -1)
     end
 
-    if Toggles.mob_esp.Value then
-        for _, object in objects_table.mob_esp do
-            object.enabled = true
-        end
+    for _, object in objects_table.mob_esp do
+        object.enabled = Toggles.mob_esp.Value
     end
-    if Toggles.player_esp.Value then
-        for _, object in objects_table.player_esp do
-            object.enabled = true
-        end
+    for _, object in objects_table.player_esp do
+        object.enabled = Toggles.player_esp.Value
     end
 end))
 
@@ -252,6 +248,10 @@ table.insert(connections_table, mobs.ChildAdded:Connect(function(child)
     })
 
     table.insert(objects_table.mob_esp, mob_object)
+end))
+
+table.insert(connections_table, storages.ChildAdded:Connect(function(child)
+    
 end))
 
 table.insert(connections_table, players.PlayerAdded:Connect(function(player)
