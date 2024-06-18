@@ -220,13 +220,13 @@ ui_box:AddButton({
     Tooltip = 'unload the whole script'
 })
 
-table.insert(connections_table, proximity_prompt_service.PromptButtonHoldBegan:Connect(function(prompt)
+function instant_prompt(prompt)
     if Toggles.instant_prompt.Value then
         prompt.HoldDuration = 0
     end
-end))
+end
 
-table.insert(connections_table, run_service.RenderStepped:Connect(function(delta)
+function render_stepped()
     if Toggles.no_slide_cd.Value and client_table then
         -- metatable is an option but some exploits doesnt support it
         -- and this works just fine 🤷
@@ -239,22 +239,25 @@ table.insert(connections_table, run_service.RenderStepped:Connect(function(delta
     for _, object in objects_table.player_esp do
         object.enabled = Toggles.player_esp.Value
     end
-end))
+end
 
-table.insert(connections_table, mobs.ChildAdded:Connect(function(child)
+function mob_added(child)
     local mob_object = esp_library:AddInstance(child, {
         enabled = Toggles.mob_esp.Value,
         Text = child.Name,
     })
 
     table.insert(objects_table.mob_esp, mob_object)
-end))
+end
 
-table.insert(connections_table, storages.ChildAdded:Connect(function(child)
-    
-end))
+function storage_added(child)
+    if child:FindFirstChild('Mobs') then
+        print('storage mobs')
+        table.insert(connections_table, child.ChildAdded:Connect(mob_added))
+    end
+end
 
-table.insert(connections_table, players.PlayerAdded:Connect(function(player)
+function player_added(player)
     local character = player.Character or player.CharacterAdded:Wait()
 
     local player_object = esp_library:AddInstance(character, {
@@ -263,7 +266,17 @@ table.insert(connections_table, players.PlayerAdded:Connect(function(player)
     })
 
     table.insert(objects_table.player_esp, player_object)
-end))
+end
+
+table.insert(connections_table, proximity_prompt_service.PromptButtonHoldBegan:Connect(instant_prompt))
+
+table.insert(connections_table, run_service.RenderStepped:Connect(render_stepped))
+
+table.insert(connections_table, mobs.ChildAdded:Connect(mob_added))
+
+table.insert(connections_table, storages.ChildAdded:Connect(storage_added))
+
+table.insert(connections_table, players.PlayerAdded:Connect(player_added))
 
 Library:OnUnload(function()
     for _, connection in connections_table do
