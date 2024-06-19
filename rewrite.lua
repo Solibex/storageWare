@@ -311,7 +311,7 @@ Library:OnUnload(function()
     for _, connection in connections_table do
         connection:Disconnect()
     end
-    esp_library:Unload()
+    xpcall(esp_library.Unload, print)
     print('Unloaded!')
     Library.Unloaded = true
 end)
