@@ -250,10 +250,31 @@ function mob_added(child)
     table.insert(objects_table.mob_esp, mob_object)
 end
 
+function item_added(child)
+    local item_object = esp_library:AddInstance(child, {
+        enabled = Toggles.item_esp.Value,
+        Text = child.Name,
+    })
+
+    table.insert(objects_table.item_esp, item_object)
+end
+
 function storage_added(child)
-    if child:FindFirstChild('Mobs') then
+    local mobs_folder = child:FindFirstChild('Mobs')
+    local loot_folder = child:FindFirstChild('Loot')
+    local items_folder = child:FindFirstChild('Items')
+
+    if mobs_folder then
         print('storage mobs')
-        table.insert(connections_table, child.ChildAdded:Connect(mob_added))
+        table.insert(connections_table, mobs_folder.ChildAdded:Connect(mob_added))
+    end
+    if loot_folder then
+        print('storage loot')
+        table.insert(connections_table, loot_folder.ChildAdded:Connect(item_added))
+    end
+    if items_folder then
+        print('storage item')
+        table.insert(connections_table, items_folder.ChildAdded:Connect(item_added))
     end
 end
 
@@ -269,13 +290,9 @@ function player_added(player)
 end
 
 table.insert(connections_table, proximity_prompt_service.PromptButtonHoldBegan:Connect(instant_prompt))
-
 table.insert(connections_table, run_service.RenderStepped:Connect(render_stepped))
-
 table.insert(connections_table, mobs.ChildAdded:Connect(mob_added))
-
 table.insert(connections_table, storages.ChildAdded:Connect(storage_added))
-
 table.insert(connections_table, players.PlayerAdded:Connect(player_added))
 
 for _, player in players:GetPlayers() do
