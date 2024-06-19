@@ -286,7 +286,7 @@ function player_added(player)
         enabled = Toggles.player_esp.Value,
         Text = player.Name,
     })
-
+    print('im balling')
     table.insert(objects_table.player_esp, player_object)
 end
 
