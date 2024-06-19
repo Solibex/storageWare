@@ -177,9 +177,9 @@ item_tab:AddToggle('item_esp', {
 })
 
 npc_tab:AddToggle('npc_esp', {
-    Text = texts.item_esp.Text,
+    Text = texts.npc_esp.Text,
     Default = false,
-    Tooltip = texts.item_esp.Tooltip,
+    Tooltip = texts.npc_esp.Tooltip,
     Callback = function() end
 })
 
