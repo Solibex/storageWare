@@ -278,7 +278,7 @@ function storage_added(child)
     end
 end
 
-function player_added(player)
+function player_added(player: Player)
     local character = player.Character or player.CharacterAdded:Wait()
     local head = character:WaitForChild('Head')
 
@@ -286,8 +286,10 @@ function player_added(player)
         enabled = Toggles.player_esp.Value,
         Text = player.Name,
     })
-    print('im balling')
+
     table.insert(objects_table.player_esp, player_object)
+    player.CharacterAdded:Wait() -- respawn
+    player_object:Die()
 end
 
 table.insert(connections_table, proximity_prompt_service.PromptButtonHoldBegan:Connect(instant_prompt))

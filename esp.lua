@@ -50,7 +50,6 @@ function esp_module:AddInstance(object, data)
 
     table.insert(text_object.Connections, run_service.RenderStepped:Connect(update))
     table.insert(text_object.Connections, object.Destroying:Connect(function()
-        print('PLEASE KYS!!')
         text_object:Die()
     end)) 
     table.insert(esp_module.functions, text_object)
