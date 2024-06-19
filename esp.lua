@@ -6,7 +6,7 @@ esp_object.__index = esp_object
 
 local camera = workspace.CurrentCamera
 
-function esp_object:Remove()
+function esp_object:Die()
     if self.Text then
         self.Text.Remove()
     end
@@ -36,7 +36,7 @@ function esp_module:AddInstance(object, data)
 
     local function update()
         if not text_object.Text then -- incase someone calls text:Remove() :horrot:
-            return text_object:Remove()
+            return text_object:Die()
         end
 
         local vec3, onscreen = camera:WorldToViewportPoint(object:GetPivot().Position)
@@ -50,7 +50,7 @@ function esp_module:AddInstance(object, data)
 
     table.insert(text_object.Connections, run_service.RenderStepped:Connect(update))
     table.insert(text_object.Connections, object.Destroying:Connect(function()
-        text_object:Remove()
+        text_object:Die()
     end)) 
     table.insert(esp_module.functions, text_object)
 
@@ -59,7 +59,7 @@ end
 
 function esp_module:Unload()
     for _, func in esp_module.functions do
-        func:Remove()
+        func:Die()
     end
 end
 
