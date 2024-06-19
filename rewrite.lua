@@ -234,11 +234,10 @@ function render_stepped()
         rawset(client_table, 'SlideCD', -1)
     end
 
-    for _, object in objects_table.mob_esp do
-        object.enabled = Toggles.mob_esp.Value
-    end
-    for _, object in objects_table.player_esp do
-        object.enabled = Toggles.player_esp.Value
+    for name, tbl in objects_table do
+        for _, object in tbl do
+            object.enabled = Toggles[name].Value
+        end
     end
 end
 
