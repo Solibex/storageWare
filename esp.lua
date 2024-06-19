@@ -8,7 +8,7 @@ local camera = workspace.CurrentCamera
 
 function esp_object:Remove()
     if self.Text then
-        self.Text:Remove()
+        self.Text.Remove()
     end
     for _, connection in self.Connections do
         connection:Disconnect()
@@ -59,9 +59,7 @@ end
 
 function esp_module:Unload()
     for _, func in esp_module.functions do
-        pcall(function()
-            func:Remove()
-        end)
+        func:Remove()
     end
 end
 
