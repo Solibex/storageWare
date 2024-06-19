@@ -13,7 +13,6 @@ function esp_object:Die()
     if self.Text then
         self.Text.Remove()
     end
-    self.enabled = false
 end
 
 local function add_object()
