@@ -7,11 +7,11 @@ esp_object.__index = esp_object
 local camera = workspace.CurrentCamera
 
 function esp_object:Die()
-    if self.Text then
-        self.Text.Remove()
-    end
     for _, connection in self.Connections do
         connection:Disconnect()
+    end
+    if self.Text then
+        self.Text.Remove()
     end
 end
 
