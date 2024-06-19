@@ -53,7 +53,9 @@ end
 
 function esp_module:Unload()
     for _, func in esp_module.functions do
-        func()
+        if func then
+            func()
+        end
     end
 end
 
