@@ -297,15 +297,15 @@ table.insert(connections_table, storages.ChildAdded:Connect(storage_added))
 table.insert(connections_table, players.PlayerAdded:Connect(player_added))
 
 for _, player in players:GetPlayers() do
-    player_added(player)
+    task.spawn(player_added, player)
 end
 
 for _, storage in storages:GetChildren() do
-    storage_added(storage)
+    task.spawn(storage_added, storage)
 end
 
 for _, mob in mobs:GetChildren() do
-    mob_added(mob)
+    task.spawn(mob_added, mob)
 end
 
 Library:OnUnload(function()
