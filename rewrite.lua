@@ -1,3 +1,4 @@
+print('[storageware] loading')
 -- solara being retarded
 if not getgenv()['Toggles'] then
     getgenv().Toggles = {}
