@@ -37,7 +37,7 @@ function esp_module:AddInstance(object, data)
 
         local vec3, onscreen = camera:WorldToViewportPoint(object:GetPivot().Position)
         if onscreen then
-            text.Visible = text.enabled
+            text.Visible = (text.enabled == false and false) or true
             text.Position = Vector2.new(vec3.X, vec3.Y)
         else
             text.Visible = false
