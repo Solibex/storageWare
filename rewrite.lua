@@ -65,7 +65,7 @@ end
 
 local repo = 'https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/'
 
-local esp_library = loadstring(game:HttpGet('https://raw.githubusercontent.com/Solibex/storageWare/main/esp.lua?token=GHSAT0AAAAAACQC3JTTJOG7JPUTZ74BD5YAZTROCYA'))()
+local esp_library = loadstring(game:HttpGet('https://raw.githubusercontent.com/Solibex/storageWare/main/esp.lua'))()
 local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
 local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
 local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
