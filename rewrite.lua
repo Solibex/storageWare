@@ -280,8 +280,9 @@ end
 
 function player_added(player)
     local character = player.Character or player.CharacterAdded:Wait()
+    local head = character:WaitForChild('Head')
 
-    local player_object = esp_library:AddInstance(character, {
+    local player_object = esp_library:AddInstance(head, {
         enabled = Toggles.player_esp.Value,
         Text = player.Name,
     })
