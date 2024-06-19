@@ -59,9 +59,9 @@ end
 
 function esp_module:Unload()
     for _, func in esp_module.functions do
-        if func then
+        pcall(function()
             func:Remove()
-        end
+        end)
     end
 end
 
