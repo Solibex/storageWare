@@ -35,10 +35,6 @@ function esp_module:AddInstance(object, data)
     end
 
     local function update()
-        if not text_object.Text then -- incase someone calls text:Remove() :horrot:
-            return text_object:Die()
-        end
-
         local vec3, onscreen = camera:WorldToViewportPoint(object:GetPivot().Position)
         if onscreen then
             text_object.Text.Visible = text_object.enabled
