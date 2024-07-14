@@ -260,9 +260,9 @@ function item_added(child)
 end
 
 function storage_added(child)
-    local mobs_folder = child:FindFirstChild('Mobs')
-    local loot_folder = child:FindFirstChild('Loot')
-    local items_folder = child:FindFirstChild('Items')
+    local mobs_folder = child:WaitForChild('Mobs')
+    local loot_folder = child:WaitForChild('Loot')
+    local items_folder = child:WaitForChild('Items')
 
     if mobs_folder then
         print('storage mobs')
