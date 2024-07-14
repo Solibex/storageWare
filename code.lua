@@ -5,30 +5,16 @@ local players = game:GetService('Players')
 function empty() end
 
 function notify(title, text, duration)
-	shared.client:Noti({
+	getgenv().client:Noti({
 		Title = title or "none",
 		Text = text or "none", 
 		Duration = duration or 1
 	})
 end
-shared.callbacks = {}
-shared.resetfix = {}
-shared.client = nil
-shared.utl = nil
-for _,v in getgc(true) do
-    if type(v) == 'table' and rawget(v, 'Player') then
-        shared.client = v
-    end
-	if type(v) == 'table' and rawget(v, 'timeFormat') then
-		shared.utl = v
-	end
-end
-assert(shared.client, 'no client was detected')
-assert(shared.utl, 'no utilities was detected')
+getgenv().callbacks = {}
+getgenv().resetfix = {}
 
-task.spawn(function()
-	notify("[✅] success", "hooked into the client, and utilities!", 1)
-end)
+
 local modules = replicatedstorage:WaitForChild('Modules')
 
 local shoplib = require(modules:WaitForChild('ShopLib'))
@@ -44,7 +30,7 @@ local root = char:WaitForChild('HumanoidRootPart')
 localplr.CharacterAdded:Connect(function(character)
 	char = character
 	root = character:WaitForChild('HumanoidRootPart')
-	for index,func in pairs(shared.resetfix) do
+	for index,func in pairs(getgenv().resetfix) do
 		print('reset fix run | '..index)
 		func()
 	end
@@ -54,7 +40,6 @@ local repo = 'https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main
 local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
 local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
 local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
-
 local Window = Library:CreateWindow({
 	Title = 'storageware',
 	Center = true,
@@ -63,6 +48,23 @@ local Window = Library:CreateWindow({
 	MenuFadeTime = 0.2
 })
 
+getgenv().client = {Noti = function(data)
+	Library:Notify(`[{data.Title}] {data.Text}`)
+end}
+getgenv().utl = {}
+
+for _,v in getgc(true) do
+    if type(v) == 'table' and rawget(v, 'Player') then
+        getgenv().client = v
+    end
+	if type(v) == 'table' and rawget(v, 'timeFormat') then
+		getgenv().utl = v
+	end
+end
+
+task.spawn(function()
+	notify("[✅] success", "hooked into the client, and utilities!", 1)
+end)
 local Tabs = {
 	Main = Window:AddTab('Main'),
 	['UI Settings'] = Window:AddTab('UI Settings'),
@@ -125,7 +127,7 @@ stuffbox:AddToggle('instant_prompt', {
 
 	Callback = function(Value)
 		if Value == true then
-			if shared.callbacks['instant_prompt'] == nil then
+			if getgenv().callbacks['instant_prompt'] == nil then
 				do
 					local thread = task.spawn(function()
 						local connection = promptservice.PromptButtonHoldBegan:Connect(function(prompt)
@@ -134,16 +136,16 @@ stuffbox:AddToggle('instant_prompt', {
 
 						print('instant_prompt start')
 
-						shared.callbacks['instant_prompt'] = function()
+						getgenv().callbacks['instant_prompt'] = function()
 							connection:Disconnect() 
 							print('instant_prompt cancel') 
 						end
 					end)
 				end
 			end
-		elseif Value == false and shared.callbacks['instant_prompt'] then
-			shared.callbacks['instant_prompt']()
-			shared.callbacks['instant_prompt'] = nil
+		elseif Value == false and getgenv().callbacks['instant_prompt'] then
+			getgenv().callbacks['instant_prompt']()
+			getgenv().callbacks['instant_prompt'] = nil
 		end
 	end
 })
@@ -154,24 +156,24 @@ stuffbox:AddToggle('noslidecd', {
 
 	Callback = function(Value)
 		if Value == true then
-			if shared.callbacks['noslidecd'] == nil then
+			if getgenv().callbacks['noslidecd'] == nil then
 				do
 					local thread = task.spawn(function()
 						while task.wait() and Toggles.noslidecd.Value do
-							rawset(shared.client, 'SlideCD', -1)
+							rawset(getgenv().client, 'SlideCD', -1)
 						end
 						print('noslidecd start')
 					end)
-					shared.callbacks['noslidecd'] = function()
+					getgenv().callbacks['noslidecd'] = function()
 						task.cancel(thread)
-						rawset(shared.client, 'SlideCD', time())
+						rawset(getgenv().client, 'SlideCD', time())
 						print('noslidecd cancel')
 					end
 				end
 			end
-		elseif Value == false and shared.callbacks['noslidecd'] then
-			shared.callbacks['noslidecd']()
-			shared.callbacks['noslidecd'] = nil
+		elseif Value == false and getgenv().callbacks['noslidecd'] then
+			getgenv().callbacks['noslidecd']()
+			getgenv().callbacks['noslidecd'] = nil
 		end
 	end
 })
@@ -182,7 +184,7 @@ espbox:AddToggle('item_esp', {
 
 	Callback = function(Value)
 		if Value == true then
-			if shared.callbacks['item_esp'] == nil then
+			if getgenv().callbacks['item_esp'] == nil then
 				do
 					local shit = {}
 					local thread = task.spawn(function()
@@ -202,8 +204,8 @@ espbox:AddToggle('item_esp', {
 						end
 						print('item_esp start')
 					end)
-					shared.callbacks['item_esp'] = function()
-						for _,v in ipairs(shit) do
+					getgenv().callbacks['item_esp'] = function()
+						for _,v in next, shit do
 							v:Disconnect()
 						end
 						print('item_esp cancel')
@@ -211,9 +213,9 @@ espbox:AddToggle('item_esp', {
 					end
 				end
 			end
-		elseif Value == false and shared.callbacks['item_esp'] then
-			shared.callbacks['item_esp']()
-			shared.callbacks['item_esp'] = nil
+		elseif Value == false and getgenv().callbacks['item_esp'] then
+			getgenv().callbacks['item_esp']()
+			getgenv().callbacks['item_esp'] = nil
 		end
 	end
 })
@@ -233,7 +235,7 @@ espbox:AddToggle('mob_esp', {
 
 	Callback = function(Value)
 		if Value == true then
-			if shared.callbacks['mob_esp'] == nil then
+			if getgenv().callbacks['mob_esp'] == nil then
 				do
 					local shit = {}
 					local thread = task.spawn(function()
@@ -248,8 +250,8 @@ espbox:AddToggle('mob_esp', {
 						end
 						print('mob_esp start')
 					end)
-					shared.callbacks['mob_esp'] = function()
-						for _,v in ipairs(shit) do
+					getgenv().callbacks['mob_esp'] = function()
+						for _,v in next, shit do
 							v:Disconnect()
 						end
 						print('mob_esp cancel')
@@ -257,9 +259,9 @@ espbox:AddToggle('mob_esp', {
 					end
 				end
 			end
-		elseif Value == false and shared.callbacks['mob_esp'] then
-			shared.callbacks['mob_esp']()
-			shared.callbacks['mob_esp'] = nil
+		elseif Value == false and getgenv().callbacks['mob_esp'] then
+			getgenv().callbacks['mob_esp']()
+			getgenv().callbacks['mob_esp'] = nil
 		end
 	end
 })
@@ -278,7 +280,7 @@ espbox:AddToggle('npc_esp', {
 
 	Callback = function(Value)
 		if Value == true then
-			if shared.callbacks['npc_esp'] == nil then
+			if getgenv().callbacks['npc_esp'] == nil then
 				do
 					local connection
 					local thread = task.spawn(function()
@@ -288,7 +290,7 @@ espbox:AddToggle('npc_esp', {
 						end)
 						print('npc_esp start')
 					end)
-					shared.callbacks['npc_esp'] = function()
+					getgenv().callbacks['npc_esp'] = function()
 						if connection then
 							connection:Disconnect()
 						end
@@ -297,9 +299,9 @@ espbox:AddToggle('npc_esp', {
 					end
 				end
 			end
-		elseif Value == false and shared.callbacks['npc_esp'] then
-			shared.callbacks['npc_esp']()
-			shared.callbacks['npc_esp'] = nil
+		elseif Value == false and getgenv().callbacks['npc_esp'] then
+			getgenv().callbacks['npc_esp']()
+			getgenv().callbacks['npc_esp'] = nil
 		end
 	end
 })
@@ -318,26 +320,26 @@ espbox:AddToggle('locked_esp', {
 
 	Callback = function(Value)
 		if Value == true then
-			if shared.callbacks['locked_esp'] == nil then
+			if getgenv().callbacks['locked_esp'] == nil then
 				do
 					local shit = {}
 					local thread = task.spawn(function()
-						for _,v in ipairs(storages:GetChildren()) do
+						for _,v in next, storages:GetChildren() do
 							if v:GetAttribute('Locked') and v:FindFirstChild('Door') and v.Door:FindFirstChild('Lock') then
 								esp(v.Door.Lock,Color3.fromRGB(255, 172, 28), Options.lockedesp_distance.Value, 'Locked')
 							end
 						end
 						print('locked_esp start')
 					end)
-					shared.callbacks['locked_esp'] = function()
+					getgenv().callbacks['locked_esp'] = function()
 						print('locked_esp cancel')
 						task.cancel(thread)
 					end
 				end
 			end
-		elseif Value == false and shared.callbacks['locked_esp'] then
-			shared.callbacks['locked_esp']()
-			shared.callbacks['locked_esp'] = nil
+		elseif Value == false and getgenv().callbacks['locked_esp'] then
+			getgenv().callbacks['locked_esp']()
+			getgenv().callbacks['locked_esp'] = nil
 		end
 	end
 })
@@ -356,35 +358,31 @@ espbox:AddToggle('third_person', {
 
 	Callback = function(Value)
 		if Value == true then
-			if shared.callbacks['third_person'] == nil then
+			if getgenv().callbacks['third_person'] == nil then
 				do
 					local shit = {}
-					local thread = task.spawn(function()
-						for _=1, 2 do
-							local loop = task.spawn(function()
-								while task.wait() do
-									localplr.CameraMode = Enum.CameraMode.Classic
-									localplr.CameraMinZoomDistance = 20
-									localplr.CameraMaxZoomDistance = 20
-								end
-							end)
-							table.insert(shit, loop)
+					table.insert(shit, localplr:GetPropertyChangedSignal('CameraMode'):Connect(function()
+						localplr.CameraMode = Enum.CameraMode.Classic
+					end))
+					table.insert(shit, localplr:GetPropertyChangedSignal('CameraMinZoomDistance'):Connect(function()
+						localplr.CameraMinZoomDistance = 20
+					end))
+					table.insert(shit, localplr:GetPropertyChangedSignal('CameraMaxZoomDistance'):Connect(function()
+						localplr.CameraMaxZoomDistance = 20
+					end))
+					print('third_person start')
+					getgenv().callbacks['third_person'] = function()
+						for _, v in next, shit do
+							v:Disconnect()
 						end
-						print('third_person start')
-					end)
-					shared.callbacks['third_person'] = function()
-						for _,v in ipairs(shit) do
-							task.cancel(v)
-						end
-						task.cancel(thread)
 
 						print('third_person cancel')
 					end
 				end
 			end
-		elseif Value == false and shared.callbacks['third_person'] then
-			shared.callbacks['third_person']()
-			shared.callbacks['third_person'] = nil
+		elseif Value == false and getgenv().callbacks['third_person'] then
+			getgenv().callbacks['third_person']()
+			getgenv().callbacks['third_person'] = nil
 		end
 	end
 }):AddKeyPicker('thirdperson', {
@@ -408,28 +406,27 @@ stuffbox:AddToggle('autopickup', {
 
 	Callback = function(Value)
 		if Value == true then
-			if shared.callbacks['autopickup'] == nil then
+			if getgenv().callbacks['autopickup'] == nil then
 				do
 					local shit = {}
 					local cum = {}
 
 					local thread = task.spawn(function()
-						for _,storage in ipairs(storages:GetChildren()) do
+						for _, storage in next, storages:GetChildren() do
 							table.insert(shit, storage.DescendantAdded:Connect(function(part)
 								if (part.Parent.Name == 'Loot') or (part.Parent.Name == 'Items') or (part.Name == "Golden Skull") then
 									table.insert(cum, part)
-									part:SetAttribute('autopickup_registered', true)
 								end
 							end))
 
 							table.insert(shit, storage.DescendantRemoving:Connect(function(part)
-								if part:GetAttribute('autopickup_registered') then
+								if table.find(cum, part) then
 									table.remove(cum, table.find(cum, part))
 								end
 							end))
 						end
 						while task.wait() do
-							for _,v in ipairs(cum) do
+							for _, v in next, cum do
 								local prompt = v:FindFirstChild('ProximityPrompt', true) or v:FindFirstChild('Prompt', true)
 								if (not prompt) or (root.Position - v:GetPivot().Position).Magnitude >= 25 then
 									continue
@@ -441,9 +438,9 @@ stuffbox:AddToggle('autopickup', {
 
 					print('autopickup start')
 
-					shared.callbacks['autopickup'] = function()
+					getgenv().callbacks['autopickup'] = function()
 						task.cancel(thread)
-						for _,v in ipairs(shit) do
+						for _,v in next, shit do
 							v:Disconnect()
 						end
 
@@ -451,9 +448,9 @@ stuffbox:AddToggle('autopickup', {
 					end
 				end
 			end
-		elseif Value == false and shared.callbacks['autopickup'] then
-			shared.callbacks['autopickup']()
-			shared.callbacks['autopickup'] = nil
+		elseif Value == false and getgenv().callbacks['autopickup'] then
+			getgenv().callbacks['autopickup']()
+			getgenv().callbacks['autopickup'] = nil
 		end
 	end
 })
@@ -465,12 +462,12 @@ stuffbox:AddToggle('nolaser', {
 
 	Callback = function(Value)
 		if Value == true then
-			if shared.callbacks['nolaser'] == nil then
+			if getgenv().callbacks['nolaser'] == nil then
 				do
 					local shit = {}
 
 					local thread = task.spawn(function()
-						for _,storage in ipairs(storages:GetChildren()) do
+						for _, storage in next, storages:GetChildren() do
 							table.insert(shit, storage.DescendantAdded:Connect(function(part)
 								if (part.Parent.Name == 'Kill') then
 									part.Parent:Destroy()
@@ -481,8 +478,8 @@ stuffbox:AddToggle('nolaser', {
 						print('nolaser start')
 					end)
 
-					shared.callbacks['nolaser'] = function()
-						for _,v in ipairs(shit) do
+					getgenv().callbacks['nolaser'] = function()
+						for _,v in next, shit do
 							v:Disconnect()
 						end
 						task.cancel(thread)
@@ -490,9 +487,9 @@ stuffbox:AddToggle('nolaser', {
 					end
 				end
 			end
-		elseif Value == false and shared.callbacks['nolaser'] then
-			shared.callbacks['nolaser']()
-			shared.callbacks['nolaser'] = nil
+		elseif Value == false and getgenv().callbacks['nolaser'] then
+			getgenv().callbacks['nolaser']()
+			getgenv().callbacks['nolaser'] = nil
 		end
 	end
 })
@@ -503,12 +500,12 @@ stuffbox:AddToggle('nodart', {
 
 	Callback = function(Value)
 		if Value == true then
-			if shared.callbacks['nodart'] == nil then
+			if getgenv().callbacks['nodart'] == nil then
 				do
 					local shit = {}
 
 					local thread = task.spawn(function()
-						for _,v in ipairs(storages:GetChildren()) do
+						for _,v in next, storages:GetChildren() do
 							table.insert(shit, v.DescendantAdded:Connect(function(part)
 								if (part.Parent.Name == 'Wire') then
 									part.Parent:Destroy()
@@ -518,8 +515,8 @@ stuffbox:AddToggle('nodart', {
 						print('nodart start')
 					end)
 
-					shared.callbacks['nodart'] = function()
-						for _,v in ipairs(shit) do
+					getgenv().callbacks['nodart'] = function()
+						for _,v in next, shit do
 							v:Disconnect()
 						end
 						print('nodart cancel')
@@ -527,13 +524,24 @@ stuffbox:AddToggle('nodart', {
 					end
 				end
 			end
-		elseif Value == false and shared.callbacks['nodart'] then
-			shared.callbacks['nodart']()
-			shared.callbacks['nodart'] = nil
+		elseif Value == false and getgenv().callbacks['nodart'] then
+			getgenv().callbacks['nodart']()
+			getgenv().callbacks['nodart'] = nil
 		end
 	end
 })
 local used = {}
+
+local function get_random_object()
+	for _,v in next, workspace:GetDescendants() do
+		if table.find(used, v) then
+			continue
+		end
+		table.insert(used, v)
+		return v
+	end
+end
+
 stuffbox:AddDropdown('open_npc_shop', {
     Values = npcs_shops,
     Default = 1, -- number index of the value / string
@@ -543,22 +551,16 @@ stuffbox:AddDropdown('open_npc_shop', {
     Tooltip = 'lets you open and buy any item', -- Information shown when you hover over the dropdown
 
     Callback = function(Value)
-		local selected
-		for _,v in ipairs(workspace:GetDescendants()) do
-			if table.find(used, v) then continue end
-			selected = v
-			table.insert(used, v)
-			break
-		end
-		local old = rawget(shared.utl.Channel, 'new')
+		local selected = get_random_object()
+		local old = rawget(getgenv().utl.Channel, 'new')
 		if old then
-			rawset(shared.utl.Channel, 'new', function()
+			rawset(getgenv().utl.Channel, 'new', function()
 				return {Duration = empty, Start = function()
-					rawset(shared.utl.Channel, 'new', old)
+					rawset(getgenv().utl.Channel, 'new', old)
 					notify("[✅] success", "opened shop gui", 1)
 				end, Cancel = empty}
 			end)
-			shared.client:OpenShopGui({selected, Value})
+			getgenv().client:OpenShopGui({selected, Value})
 		else
 			notify("[❌] error", "failed to obtain channel.new", 1)
 		end
@@ -574,14 +576,14 @@ espbox:AddToggle('rainbowchar', {
 
     Callback = function(Value)
         if Value == true then
-            if shared.callbacks['rainbowchar'] == nil then
+            if getgenv().callbacks['rainbowchar'] == nil then
                 do
                     local thread = task.spawn(function()
 						local rainbowresetfix = function()
 							repeat task.wait() until char
 							while char and task.wait() do
 								hue += delta
-								 for _, v in ipairs(char:GetChildren()) do
+								for _, v in next, char:GetChildren() do
 									if v:IsA("MeshPart") then
 										v.Color = Color3.fromHSV(hue,1,1)
 									end
@@ -593,19 +595,19 @@ espbox:AddToggle('rainbowchar', {
 							print('rainbowchar run')
 						end
 						rainbowresetfix()
-						table.insert(shared.resetfix, rainbowresetfix)
+						table.insert(getgenv().resetfix, rainbowresetfix)
                         print('rainbowchar start')
                     end)
-					shared.callbacks['rainbowchar'] = function()
-						shared.resetfix['rainbowchar'] = nil
+					getgenv().callbacks['rainbowchar'] = function()
+						getgenv().resetfix['rainbowchar'] = nil
 						task.cancel(thread)
 						print('rainbowchar cancel')
 					end
                 end
             end
-        elseif Value == false and shared.callbacks['rainbowchar'] then
-            shared.callbacks['rainbowchar']()
-            shared.callbacks['rainbowchar'] = nil
+        elseif Value == false and getgenv().callbacks['rainbowchar'] then
+            getgenv().callbacks['rainbowchar']()
+            getgenv().callbacks['rainbowchar'] = nil
         end
     end
 })
@@ -616,7 +618,7 @@ espbox:AddToggle('forcefieldchar', {
 
     Callback = function(Value)
         if Value == true then
-            if shared.callbacks['forcefieldchar'] == nil then
+            if getgenv().callbacks['forcefieldchar'] == nil then
                 do
                     local thread = task.spawn(function()
 						local forcefieldresetfix = function()
@@ -629,18 +631,18 @@ espbox:AddToggle('forcefieldchar', {
 							print('force field run')
 						end
 						forcefieldresetfix()
-						table.insert(shared.resetfix, forcefieldresetfix)
+						table.insert(getgenv().resetfix, forcefieldresetfix)
                         print('forcefieldchar start')
                     end)
-					shared.callbacks['forcefieldchar'] = function()
-						shared.resetfix['forcefieldchar'] = nil
+					getgenv().callbacks['forcefieldchar'] = function()
+						getgenv().resetfix['forcefieldchar'] = nil
 						print('forcefieldchar cancel')
 					end
                 end
             end
-        elseif Value == false and shared.callbacks['forcefieldchar'] then
-            shared.callbacks['forcefieldchar']()
-            shared.callbacks['forcefieldchar'] = nil
+        elseif Value == false and getgenv().callbacks['forcefieldchar'] then
+            getgenv().callbacks['forcefieldchar']()
+            getgenv().callbacks['forcefieldchar'] = nil
         end
     end
 })
@@ -702,9 +704,9 @@ stuffbox:AddLabel('open crafting table'):AddKeyPicker('opencrafttable', {
 	
 	Callback = function(Value)
 		if Value == true then
-			shared.client:SetupCraft()
+			getgenv().client:SetupCraft()
 		else
-			shared.client:CloseCraft()
+			getgenv().client:CloseCraft()
 		end
 	end,
 
@@ -737,9 +739,9 @@ Library.KeybindFrame.Visible = true;
 
 Library:OnUnload(function()
 	WatermarkConnection:Disconnect()
-	for index,func in pairs(shared.callbacks) do
+	for index,func in pairs(getgenv().callbacks) do
 		func()
-		shared.callbacks[index] = nil
+		getgenv().callbacks[index] = nil
 	end
 	print('Unloaded!')
 	Library.Unloaded = true
