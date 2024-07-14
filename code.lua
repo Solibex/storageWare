@@ -30,7 +30,7 @@ local root = char:WaitForChild('HumanoidRootPart')
 localplr.CharacterAdded:Connect(function(character)
 	char = character
 	root = character:WaitForChild('HumanoidRootPart')
-	for index,func in pairs(getgenv().resetfix) do
+	for index,func in next, getgenv().resetfix do
 		print('reset fix run | '..index)
 		func()
 	end
@@ -188,7 +188,7 @@ espbox:AddToggle('item_esp', {
 				do
 					local shit = {}
 					local thread = task.spawn(function()
-						for _,v in ipairs(storages:GetChildren()) do
+						for _, v in next, storages:GetChildren() do
 							local connection = v.DescendantAdded:Connect(function(part)
 								if (part.Parent.Name == 'Loot') then
                                     esp(part, Color3.new(0, 255, 0), Options.itemesp_distance.Value)
@@ -239,7 +239,7 @@ espbox:AddToggle('mob_esp', {
 				do
 					local shit = {}
 					local thread = task.spawn(function()
-						for _,v in ipairs(storages:GetChildren()) do
+						for _,v in next, storages:GetChildren() do
 							table.insert(shit, v.DescendantAdded:Connect(function(part)
 								if part.Parent.Name ~= 'Mobs' then return end
 								esp(part, Color3.new(255, 0, 0), Options.mobesp_distance.Value)
@@ -625,7 +625,7 @@ espbox:AddToggle('forcefieldchar', {
                     local thread = task.spawn(function()
 						local forcefieldresetfix = function()
 							repeat task.wait() until char
-							for _, v in ipairs(char:GetChildren()) do
+							for _, v in char:GetChildren() do
 								if v:IsA("BasePart") then
 									v.Material = Enum.Material.ForceField
 								end
@@ -676,21 +676,14 @@ stuffbox:AddLabel('teleport to base'):AddKeyPicker('teleportbase', {
 	
 	Callback = function(Value)
 		notify("[❓] info", "attempting to teleporting to base", 1)
-		if cachedBase then
-			root:PivotTo(cachedBase:GetPivot())
-			notify("[✅] success", "teleported to base", 1)
-			return
-		else
-			for _,v in ipairs(storages:GetChildren()) do
-				if v:GetAttribute("Owner") == localplr.Name then
-					root:PivotTo(v:GetPivot())
-					cachedBase = v
-					notify("[✅] success", "teleported to base", 1)
-					return
-				end
+		for _,v in next, storages:GetChildren() do
+			if v:GetAttribute("Owner") == localplr.Name then
+				root:PivotTo(v:GetPivot())
+				notify("[✅] success", "teleported to base", 1)
+				return
 			end
 		end
-		Library:Notify('no base detected')
+		notify('[❌] failed', "failed to find base", 1)
 	end,
 
 	ChangedCallback = empty
