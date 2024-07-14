@@ -1,4 +1,4 @@
-repeat wait() until game:IsLoaded()
+repeat task.wait() until game:IsLoaded()
 local replicatedStorage = game:GetService("ReplicatedStorage")
 local Client, Utl = (replicatedStorage:WaitForChild("ClientSetup")):InvokeServer()
 local clientDecompiled = decompile(Client)
