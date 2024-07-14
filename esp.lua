@@ -1,6 +1,7 @@
 local run_service = cloneref(game:GetService('RunService')) :: RunService
 
-local esp_module = {functions = {}}
+local esp_module = {}
+esp_module.functions = {}
 local esp_object = {}
 esp_object.__index = esp_object
 
