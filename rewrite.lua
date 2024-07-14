@@ -259,26 +259,28 @@ function item_added(child)
     table.insert(objects_table.item_esp, item_object)
 end
 
-function storage_added(child)
-    local mobs_folder = child:WaitForChild('Mobs')
-    local loot_folder = child:WaitForChild('Loot')
-    local items_folder = child:WaitForChild('Items')
-
-    if mobs_folder then
-        print('storage mobs')
-        table.insert(connections_table, mobs_folder.ChildAdded:Connect(mob_added))
-    end
-    if loot_folder then
-        print('storage loot')
-        table.insert(connections_table, loot_folder.ChildAdded:Connect(item_added))
-    end
-    if items_folder then
-        print('storage item')
-        table.insert(connections_table, items_folder.ChildAdded:Connect(item_added))
-    end
+function storage_added(storage)
+    storage.ChildAdded:Connect(function(folder)
+        if folder.Name == 'Mobs' then
+            print('storage mobs')
+            table.insert(connections_table, folder.ChildAdded:Connect(mob_added))
+        end
+        if folder.Name == 'Loot' then
+            print('storage loot')
+            table.insert(connections_table, folder.ChildAdded:Connect(item_added))
+        end
+        if folder.Name == 'Items' then
+            print('storage item')
+            table.insert(connections_table, folder.ChildAdded:Connect(item_added))
+        end
+    end)
 end
 
 function player_added(player: Player)
+    if player == local_player then
+        return
+    end
+
     local character = player.Character or player.CharacterAdded:Wait()
     local head = character:WaitForChild('Head')
 
