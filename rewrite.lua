@@ -192,9 +192,9 @@ mob_tab:AddToggle('mob_esp', {
 })
 
 storage_tab:AddToggle('storage_esp', {
-    Text = texts.mob_esp.Text,
+    Text = texts.storage_esp.Text,
     Default = false,
-    Tooltip = texts.mob_esp.Tooltip,
+    Tooltip = texts.storage_esp.Tooltip,
     Callback = function() end
 })
 
