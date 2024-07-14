@@ -1,14 +1,8 @@
----@diagnostic disable: undefined-global
 local promptservice = game:GetService('ProximityPromptService')
 local replicatedstorage = game:GetService('ReplicatedStorage')
 local players = game:GetService('Players')
 
-function newprint(x) rconsoleprint(x..'\n') end
 function empty() end
-if getgenv().debugConsole then
-	rconsolename('debug menu')	
-	newprint('We are running on build ALPHA')
-end
 
 function notify(title, text, duration)
 	shared.client:Noti({
@@ -51,7 +45,7 @@ localplr.CharacterAdded:Connect(function(character)
 	char = character
 	root = character:WaitForChild('HumanoidRootPart')
 	for index,func in pairs(shared.resetfix) do
-		newprint('reset fix run | '..index)
+		print('reset fix run | '..index)
 		func()
 	end
 end)
@@ -138,11 +132,11 @@ stuffbox:AddToggle('instant_prompt', {
 							prompt.HoldDuration = 0
 						end)
 
-						newprint('instant_prompt start')
+						print('instant_prompt start')
 
 						shared.callbacks['instant_prompt'] = function()
 							connection:Disconnect() 
-							newprint('instant_prompt cancel') 
+							print('instant_prompt cancel') 
 						end
 					end)
 				end
@@ -166,12 +160,12 @@ stuffbox:AddToggle('noslidecd', {
 						while task.wait() and Toggles.noslidecd.Value do
 							rawset(shared.client, 'SlideCD', -1)
 						end
-						newprint('noslidecd start')
+						print('noslidecd start')
 					end)
 					shared.callbacks['noslidecd'] = function()
 						task.cancel(thread)
 						rawset(shared.client, 'SlideCD', time())
-						newprint('noslidecd cancel')
+						print('noslidecd cancel')
 					end
 				end
 			end
@@ -206,13 +200,13 @@ espbox:AddToggle('item_esp', {
 							end)
 							table.insert(shit, connection)
 						end
-						newprint('item_esp start')
+						print('item_esp start')
 					end)
 					shared.callbacks['item_esp'] = function()
 						for _,v in ipairs(shit) do
 							v:Disconnect()
 						end
-						newprint('item_esp cancel')
+						print('item_esp cancel')
 						task.cancel(thread)
 					end
 				end
@@ -252,13 +246,13 @@ espbox:AddToggle('mob_esp', {
 								esp(part, Color3.new(255, 0, 0), Options.mobesp_distance.Value)
 							end))
 						end
-						newprint('mob_esp start')
+						print('mob_esp start')
 					end)
 					shared.callbacks['mob_esp'] = function()
 						for _,v in ipairs(shit) do
 							v:Disconnect()
 						end
-						newprint('mob_esp cancel')
+						print('mob_esp cancel')
 						task.cancel(thread)
 					end
 				end
@@ -292,13 +286,13 @@ espbox:AddToggle('npc_esp', {
 							if part.Parent.Name ~= 'NPC' then return end
 							esp(part,Color3.new(0,0,255), Options.npcesp_distance.Value)
 						end)
-						newprint('npc_esp start')
+						print('npc_esp start')
 					end)
 					shared.callbacks['npc_esp'] = function()
 						if connection then
 							connection:Disconnect()
 						end
-						newprint('npc_esp cancel')
+						print('npc_esp cancel')
 						task.cancel(thread)
 					end
 				end
@@ -333,10 +327,10 @@ espbox:AddToggle('locked_esp', {
 								esp(v.Door.Lock,Color3.fromRGB(255, 172, 28), Options.lockedesp_distance.Value, 'Locked')
 							end
 						end
-						newprint('locked_esp start')
+						print('locked_esp start')
 					end)
 					shared.callbacks['locked_esp'] = function()
-						newprint('locked_esp cancel')
+						print('locked_esp cancel')
 						task.cancel(thread)
 					end
 				end
@@ -376,7 +370,7 @@ espbox:AddToggle('third_person', {
 							end)
 							table.insert(shit, loop)
 						end
-						newprint('third_person start')
+						print('third_person start')
 					end)
 					shared.callbacks['third_person'] = function()
 						for _,v in ipairs(shit) do
@@ -384,7 +378,7 @@ espbox:AddToggle('third_person', {
 						end
 						task.cancel(thread)
 
-						newprint('third_person cancel')
+						print('third_person cancel')
 					end
 				end
 			end
@@ -445,7 +439,7 @@ stuffbox:AddToggle('autopickup', {
 						end
 					end)
 
-					newprint('autopickup start')
+					print('autopickup start')
 
 					shared.callbacks['autopickup'] = function()
 						task.cancel(thread)
@@ -453,7 +447,7 @@ stuffbox:AddToggle('autopickup', {
 							v:Disconnect()
 						end
 
-						newprint('autopick cancel')
+						print('autopick cancel')
 					end
 				end
 			end
@@ -484,7 +478,7 @@ stuffbox:AddToggle('nolaser', {
 							end))
 						end
 
-						newprint('nolaser start')
+						print('nolaser start')
 					end)
 
 					shared.callbacks['nolaser'] = function()
@@ -492,7 +486,7 @@ stuffbox:AddToggle('nolaser', {
 							v:Disconnect()
 						end
 						task.cancel(thread)
-						newprint('nolaser cancel')
+						print('nolaser cancel')
 					end
 				end
 			end
@@ -521,14 +515,14 @@ stuffbox:AddToggle('nodart', {
 								end
 							end))
 						end
-						newprint('nodart start')
+						print('nodart start')
 					end)
 
 					shared.callbacks['nodart'] = function()
 						for _,v in ipairs(shit) do
 							v:Disconnect()
 						end
-						newprint('nodart cancel')
+						print('nodart cancel')
 						task.cancel(thread)
 					end
 				end
@@ -560,11 +554,11 @@ stuffbox:AddDropdown('open_npc_shop', {
 		if old then
 			rawset(shared.utl.Channel, 'new', function()
 				return {Duration = empty, Start = function()
+					rawset(shared.utl.Channel, 'new', old)
 					notify("[✅] success", "opened shop gui", 1)
 				end, Cancel = empty}
 			end)
 			shared.client:OpenShopGui({selected, Value})
-			rawset(shared.utl.Channel, 'new', old)
 		else
 			notify("[❌] error", "failed to obtain channel.new", 1)
 		end
@@ -747,10 +741,7 @@ Library:OnUnload(function()
 		func()
 		shared.callbacks[index] = nil
 	end
-	if rconsoleclose then
-		rconsoleclose()
-	end
-	newprint('Unloaded!')
+	print('Unloaded!')
 	Library.Unloaded = true
 end)
 
