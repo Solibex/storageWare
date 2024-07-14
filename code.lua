@@ -17,7 +17,7 @@ getgenv().resetfix = {}
 
 local modules = replicatedstorage:WaitForChild('Modules')
 
-local shoplib = require(modules:WaitForChild('ShopLib'))
+local shoplib = require(modules:WaitForChild('ShopLib')) or {}
 
 local storages = workspace:WaitForChild('Storages')
 local mobs = workspace:WaitForChild('Mobs')
@@ -542,30 +542,32 @@ local function get_random_object()
 	end
 end
 
-stuffbox:AddDropdown('open_npc_shop', {
-    Values = npcs_shops,
-    Default = 1, -- number index of the value / string
-    Multi = false, -- true / false, allows multiple choices to be selected
-
-    Text = 'open npc shop',
-    Tooltip = 'lets you open and buy any item', -- Information shown when you hover over the dropdown
-
-    Callback = function(Value)
-		local selected = get_random_object()
-		local old = rawget(getgenv().utl.Channel, 'new')
-		if old then
-			rawset(getgenv().utl.Channel, 'new', function()
-				return {Duration = empty, Start = function()
-					rawset(getgenv().utl.Channel, 'new', old)
-					notify("[✅] success", "opened shop gui", 1)
-				end, Cancel = empty}
-			end)
-			getgenv().client:OpenShopGui({selected, Value})
-		else
-			notify("[❌] error", "failed to obtain channel.new", 1)
+if #npcs_shops > 0 then
+	stuffbox:AddDropdown('open_npc_shop', {
+		Values = npcs_shops,
+		Default = 1, -- number index of the value / string
+		Multi = false, -- true / false, allows multiple choices to be selected
+	
+		Text = 'open npc shop',
+		Tooltip = 'lets you open and buy any item', -- Information shown when you hover over the dropdown
+	
+		Callback = function(Value)
+			local selected = get_random_object()
+			local old = rawget(getgenv().utl.Channel, 'new')
+			if old then
+				rawset(getgenv().utl.Channel, 'new', function()
+					return {Duration = empty, Start = function()
+						rawset(getgenv().utl.Channel, 'new', old)
+						notify("[✅] success", "opened shop gui", 1)
+					end, Cancel = empty}
+				end)
+				getgenv().client:OpenShopGui({selected, Value})
+			else
+				notify("[❌] error", "failed to obtain channel.new", 1)
+			end
 		end
-    end
-})
+	})
+end
 
 local hue = 0
 local delta = 0.005
