@@ -49,7 +49,7 @@ function esp_module:AddInstance(object, data)
     table.insert(text_object.Connections, object.Destroying:Connect(function()
         text_object:Die()
     end)) 
-    table.insert(esp_module.functions, text_object)
+    table.insert(esp_module.functions, text_object.Die)
 
     return text_object
 end
@@ -57,7 +57,7 @@ end
 function esp_module:Unload()
     for _, func in esp_module.functions do
         if func then
-            func:Die()
+            func()
         end
     end
 end
