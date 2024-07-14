@@ -55,7 +55,9 @@ end
 
 function esp_module:Unload()
     for _, func in esp_module.functions do
-        func:Die()
+        if func then
+            func:Die()
+        end
     end
 end
 
