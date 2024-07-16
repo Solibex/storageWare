@@ -1,6 +1,7 @@
 local promptservice = game:GetService('ProximityPromptService')
 local replicatedstorage = game:GetService('ReplicatedStorage')
 local players = game:GetService('Players')
+local run_service = game:GetService('RunService')
 
 function empty() end
 
@@ -587,7 +588,7 @@ espbox:AddToggle('rainbowchar', {
 								hue += delta
 								for _, v in next, char:GetChildren() do
 									if v:IsA("MeshPart") then
-										v.Color = Color3.fromHSV(hue,1,1)
+										v.Color = Color3.fromHSV(hue, 1, 1)
 									end
 								end 
 								if hue >= 1 then
@@ -714,7 +715,7 @@ local FrameTimer = tick()
 local FrameCounter = 0;
 local FPS = 60;
 
-local WatermarkConnection = game:GetService('RunService').RenderStepped:Connect(function()
+local WatermarkConnection = run_service.RenderStepped:Connect(function()
 	FrameCounter += 1;
 
 	if (tick() - FrameTimer) >= 1 then
