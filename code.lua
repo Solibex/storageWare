@@ -1,3 +1,10 @@
+getgenv().callbacks = {}
+getgenv().resetfix = {}
+getgenv().client = {Noti = function(data)
+	Library:Notify(`[{data.Title}] {data.Text}`)
+end}
+getgenv().utl = {}
+
 local promptservice = game:GetService('ProximityPromptService')
 local replicatedstorage = game:GetService('ReplicatedStorage')
 local players = game:GetService('Players')
@@ -12,9 +19,6 @@ function notify(title, text, duration)
 		Duration = duration or 1
 	})
 end
-getgenv().callbacks = {}
-getgenv().resetfix = {}
-
 
 local modules = replicatedstorage:WaitForChild('Modules')
 
@@ -49,10 +53,6 @@ local Window = Library:CreateWindow({
 	MenuFadeTime = 0.2
 })
 
-getgenv().client = {Noti = function(data)
-	Library:Notify(`[{data.Title}] {data.Text}`)
-end}
-getgenv().utl = {}
 
 for _,v in getgc(true) do
     if type(v) == 'table' and rawget(v, 'Player') then
@@ -285,9 +285,10 @@ espbox:AddToggle('npc_esp', {
 				do
 					local connection
 					local thread = task.spawn(function()
-						connection = workspace.DescendantAdded:Connect(function(part)
-							if part.Parent.Name ~= 'NPC' then return end
-							esp(part,Color3.new(0,0,255), Options.npcesp_distance.Value)
+						connection = storages.DescendantAdded:Connect(function(part)
+							if part.Parent.Name == 'NPC' then
+								esp(part,Color3.new(0,0,255), Options.npcesp_distance.Value)
+							end
 						end)
 						print('npc_esp start')
 					end)
@@ -363,14 +364,23 @@ espbox:AddToggle('third_person', {
 				do
 					local shit = {}
 					table.insert(shit, localplr:GetPropertyChangedSignal('CameraMode'):Connect(function()
-						localplr.CameraMode = Enum.CameraMode.Classic
+						if localplr.CameraMode == Enum.CameraMode.LockFirstPerson then
+							localplr.CameraMode = Enum.CameraMode.Classic
+						end
 					end))
 					table.insert(shit, localplr:GetPropertyChangedSignal('CameraMinZoomDistance'):Connect(function()
-						localplr.CameraMinZoomDistance = 20
+						if localplr.CameraMinZoomDistance ~= 20 then
+							localplr.CameraMinZoomDistance = 20
+						end
 					end))
-					table.insert(shit, localplr:GetPropertyChangedSignal('CameraMaxZoomDistance'):Connect(function()
-						localplr.CameraMaxZoomDistance = 20
+					table.insert(shit, localplr:GetPropertyChangedSignal('CameraMaxZoomDistance'):Connect(function(attribute)
+						if localplr.CameraMaxZoomDistance ~= 20 then
+							localplr.CameraMaxZoomDistance = 20
+						end
 					end))
+					localplr.CameraMode = Enum.CameraMode.Classic
+					localplr.CameraMinZoomDistance = 20
+					localplr.CameraMaxZoomDistance = 20
 					print('third_person start')
 					getgenv().callbacks['third_person'] = function()
 						for _, v in next, shit do
