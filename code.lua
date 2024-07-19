@@ -22,9 +22,9 @@ end
 
 local modules = replicatedstorage:WaitForChild('Modules')
 
-local shoplib
+local shoplib = {}
 task.spawn(function()
-	shoplib = require(modules:WaitForChild('ShopLib')) or {}
+	shoplib = require(modules:WaitForChild('ShopLib'))
 end)
 local storages = workspace:WaitForChild('Storages')
 local mobs = workspace:WaitForChild('Mobs')
@@ -92,7 +92,7 @@ if not fireproximityprompt or executor == "Electron" then -- electron has dummy 
 end
 local npcs_shops = {}
 
-for i, v in pairs(shoplib) do
+for i, v in next, shoplib do
 	if rawget(v, 'ToolTypes') then -- sellers
 		continue
 	end
