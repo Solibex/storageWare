@@ -1,7 +1,7 @@
 getgenv().callbacks = {}
 getgenv().resetfix = {}
 getgenv().client = {Noti = function(data)
-	Library:Notify(`[{data.Title}] {data.Text}`)
+	getgenv().Library:Notify(`[{data.Title}] {data.Text}`)
 end}
 getgenv().utl = {}
 
@@ -22,8 +22,10 @@ end
 
 local modules = replicatedstorage:WaitForChild('Modules')
 
-local shoplib = require(modules:WaitForChild('ShopLib')) or {}
-
+local shoplib
+task.spawn(function()
+	shoplib = require(modules:WaitForChild('ShopLib')) or {}
+end)
 local storages = workspace:WaitForChild('Storages')
 local mobs = workspace:WaitForChild('Mobs')
 
