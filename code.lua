@@ -57,7 +57,8 @@ local Window = Library:CreateWindow({
 
 
 for _,v in getgc(true) do
-    if type(v) == 'table' and rawget(v, 'Player') then
+	-- they added piano sheets?
+    if type(v) == 'table' and rawget(v, 'Player') and rawget(v, 'SlideCD') then
         getgenv().client = v
     end
 	if type(v) == 'table' and rawget(v, 'timeFormat') then
