@@ -57,7 +57,7 @@ local Window = Library:CreateWindow({
 
 
 for _,v in getgc(true) do
-    if type(v) == 'table' and rawget(v, 'Player') then
+    if type(v) == 'table' and rawget(v, 'Player') and rawget(v, 'SlideCD') then
         getgenv().client = v
     end
 	if type(v) == 'table' and rawget(v, 'timeFormat') then
@@ -375,7 +375,7 @@ espbox:AddToggle('third_person', {
 							localplr.CameraMinZoomDistance = 20
 						end
 					end))
-					table.insert(shit, localplr:GetPropertyChangedSignal('CameraMaxZoomDistance'):Connect(function(attribute)
+					table.insert(shit, localplr:GetPropertyChangedSignal('CameraMaxZoomDistance'):Connect(function()
 						if localplr.CameraMaxZoomDistance ~= 20 then
 							localplr.CameraMaxZoomDistance = 20
 						end
@@ -488,7 +488,7 @@ stuffbox:AddToggle('nolaser', {
 							end))
 						end
 
-						print('nolaser start')
+						print('nolaser start a')
 					end)
 
 					getgenv().callbacks['nolaser'] = function()
@@ -565,15 +565,13 @@ if #npcs_shops > 0 then
 		Tooltip = 'lets you open and buy any item', -- Information shown when you hover over the dropdown
 	
 		Callback = function(Value)
+			do
+				return notify("ermm", "disabled", 1)
+			end
+
 			local selected = get_random_object()
 			local old = rawget(getgenv().utl.Channel, 'new')
 			if old then
-				rawset(getgenv().utl.Channel, 'new', function()
-					return {Duration = empty, Start = function()
-						rawset(getgenv().utl.Channel, 'new', old)
-						notify("[✅] success", "opened shop gui", 1)
-					end, Cancel = empty}
-				end)
 				getgenv().client:OpenShopGui({selected, Value})
 			else
 				notify("[❌] error", "failed to obtain channel.new", 1)
